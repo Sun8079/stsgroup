@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>เข้าสู่ระบบ - STS Group</title>
+    <link rel="stylesheet" href="login.css">
+</head>
+<body class="login-body">
+
+<div class="login-card">
+    <img src="img/sts-image.png" alt="logo" class="login-logo">
+    <h2>STS Group </h2>
+    <p>กรุณากรอกรหัสพนักงานเพื่อเข้าสู่ระบบ</p>
+    
+    <div class="input-group">
+        <input type="text" id="username" placeholder="ชื่อผู้ใช้งาน (User / Admin)">
+        <input type="password" id="password" placeholder="รหัสผ่าน">
+    </div>
+
+    <button onclick="handleLogin()" class="login-btn">เข้าสู่ระบบ</button>
+    <p id="error-msg" style="color: red; display: none; font-size: 14px; margin-top: 10px;">
+        รหัสผ่านไม่ถูกต้อง!
+    </p>
+</div>
+
+<script>
+function handleLogin() {
+    const user = document.getElementById('username').value.toLowerCase();
+    const pass = document.getElementById('password').value;
+    const error = document.getElementById('error-msg');
+
+    // ระบบตรวจสอบจำลอง (ในใช้งานจริงต้องใช้ Database)
+    if (user === 'admin' && pass === '1234') {
+        // ถ้าเป็น Admin ให้ไปหน้าตารางพร้อมแนบสิทธิ์ admin
+        window.location.href = 'index.html?role=admin';
+    } 
+    else if (user === 'user') {
+        // ถ้าเป็น User ทั่วไป (ไม่ต้องใช้รหัสผ่าน หรือกำหนดไว้ก็ได้)
+        window.location.href = 'index.html?role=user';
+    } 
+    else {
+        // ถ้าข้อมูลไม่ถูกต้อง
+        error.style.display = 'block';
+    }
+}
+</script>
+
+</body>
+</html>

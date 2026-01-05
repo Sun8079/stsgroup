@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - สรุปรายการตรวจสอบ</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;700&display=swap">
+    <style>
+        body { font-family: 'Sarabun', sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; }
+        
+        .container { max-width: 1000px; margin: auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+
+        /* Header Layout */
+        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 20px; }
+        .logo-area { display: flex; align-items: center; gap: 15px; }
+        .logo-area img { width: 50px; }
+        
+        /* ปุ่มควบคุม */
+        .action-bar { display: flex; gap: 10px; margin-bottom: 15px; }
+        .icon-btn { cursor: pointer; border: 1px solid #ddd; background: white; padding: 8px; border-radius: 5px; transition: 0.2s; }
+        .icon-btn:hover { background: #eee; transform: translateY(-2px); }
+        .icon-btn img { width: 25px; height: 25px; display: block; }
+
+        /* ตารางสรุป */
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid #333; padding: 12px; text-align: left; }
+        th { background-color: #f8f9fa; text-align: center; }
+
+        /* Badge สถานะ */
+        .status { padding: 4px 10px; border-radius: 12px; font-size: 12px; color: white; font-weight: bold; }
+        .status-complete { background: #28a745; }
+        .status-pending { background: #ffc107; color: #333; }
+
+        /* จัดระเบียบ Checkbox ให้ตรงข้อความและไม่กินพื้นที่ */
+        .mini-checklist { display: flex; flex-direction: column; gap: 4px; font-size: 13px; }
+        .check-item { display: flex; align-items: center; gap: 8px; }
+        .check-item input { width: 14px; height: 14px; margin: 0; }
+
+        @media print {
+            .action-bar, .no-print { display: none !important; }
+            body { background: white; padding: 0; }
+            .container { box-shadow: none; width: 100%; max-width: 100%; }
+            @page { size: A4; margin: 1cm; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <div class="logo-area">
+            <img src="img/sts-image.png" alt="STS Logo">
+            <h2>รายงานสรุปสถานะรายบุคคล (Preview)</h2>
+        </div>
+        <div class="action-bar no-print">
+            <button class="icon-btn" onclick="window.location.href='index.html'" title="กลับหน้าหลัก">
+                <img src="img/back-button.png" alt="Back">
+            </button>
+            <button class="icon-btn" onclick="window.print()" title="พิมพ์สรุป">
+                <img src="img/printer.png" alt="Print">
+            </button>
+        </div>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 5%;">ลำดับ</th>
+                <th style="width: 25%;">ชื่อผู้รับมอบ</th>
+                <th style="width: 45%;">สถานะการทดสอบสำคัญ</th>
+                <th style="width: 25%;">สถานะรวม</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="text-align: center;">1</td>
+                <td><strong>นายสมชาย ใจดี</strong><br><small>แผนก IT Support</small></td>
+                <td>
+                    <div class="mini-checklist">
+                        <label class="check-item"><input type="checkbox" checked disabled> Login เครื่องได้</label>
+                        <label class="check-item"><input type="checkbox" checked disabled> ใช้งานโปรแกรมพื้นฐาน</label>
+                        <label class="check-item"><input type="checkbox" disabled> เข้าถึง File Sharing</label>
+                    </div>
+                </td>
+                <td style="text-align: center;">
+                    <span class="status status-pending">กำลังดำเนินการ</span><br>
+                    <small>10/13 รายการเสร็จสิ้น</small>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: center;">2</td>
+                <td><strong>นางสาวใฝ่เรียน</strong><br><small>แผนกบัญชี</small></td>
+                <td>
+                    <div class="mini-checklist">
+                        <label class="check-item"><input type="checkbox" checked disabled> Login เครื่องได้</label>
+                        <label class="check-item"><input type="checkbox" checked disabled> ใช้งานโปรแกรมพื้นฐาน</label>
+                        <label class="check-item"><input type="checkbox" checked disabled> เข้าถึง File Sharing</label>
+                    </div>
+                </td>
+                <td style="text-align: center;">
+                    <span class="status status-complete">เสร็จสมบูรณ์</span><br>
+                    <small>13/13 รายการเสร็จสิ้น</small>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div style="margin-top: 30px; text-align: right;" class="no-print">
+        <p>พิมพ์เมื่อวันที่: <span id="current-date"></span></p>
+    </div>
+</div>
+
+<script>
+    function loadAllUserPreview() {
+    const users = ['user1', 'user2']; // รายชื่อ id ของ user ทั้งหมด
+    const tableBody = document.querySelector('tbody');
+    tableBody.innerHTML = ''; // ล้างข้อมูลตัวอย่างออกก่อน
+
+    users.forEach((userId, index) => {
+        // ดึงข้อมูลจริงจาก Storage
+        const rawData = localStorage.getItem(`data_${userId}`);
+        
+        if (rawData) {
+            const data = JSON.parse(rawData);
+            
+            // สร้างแถวตารางใหม่ตามข้อมูลจริง
+            const row = `
+                <tr>
+                    <td style="text-align: center;">${index + 1}</td>
+                    <td><strong>${userId}</strong></td>
+                    <td>
+                        <div class="mini-checklist">
+                            <label class="check-item"><input type="checkbox" ${data.login ? 'checked' : ''} disabled> Login เครื่องได้</label>
+                            <label class="check-item"><input type="checkbox" ${data.software ? 'checked' : ''} disabled> ใช้งานโปรแกรมพื้นฐาน</label>
+                            <label class="check-item"><input type="checkbox" ${data.sharing ? 'checked' : ''} disabled> เข้าถึง File Sharing</label>
+                        </div>
+                    </td>
+                    <td style="text-align: center;">
+                        <span class="status status-complete">${data.status}</span>
+                    </td>
+                </tr>`;
+            tableBody.innerHTML += row;
+        }
+    });
+}
+
+window.onload = loadAllUserPreview;
+    document.getElementById('current-date').innerText = new Date().toLocaleDateString('th-TH');
+</script>
+
+</body>
+</html>

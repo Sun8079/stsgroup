@@ -1,0 +1,362 @@
+body {
+    font-family: 'Sarabun', sans-serif;
+    font-size: 16px; /* ขนาดตัวอักษร */
+    color: #110000; /* สีของตัวอักษร */
+    margin: 20px;
+}
+
+.Header {
+    width: 100%;
+    border-collapse: collapse;
+    border: 2px solid black;
+    font-family: sans-serif;
+}
+
+.Header td {
+    border: 2px solid black;
+    text-align: center;
+    vertical-align: middle;
+    padding: 0; /* ล้าง padding เพื่อให้ div ด้านในชิดขอบ */
+}
+
+/* ปรับขนาดแต่ละคอลัมน์ */
+.logo-cell { width: 20%; padding: 10px !important; }
+.title-cell { width: 50%; font-size: 18px; }
+.info-cell { width: 30%; }
+
+/* การจัดการแบ่งครึ่งบน-ล่าง */
+.top-row, .bottom-row {
+    padding: 10px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.top-row {
+    border-bottom: 2px solid black; /* เส้นคั่นกลางระหว่างรหัสและวันที่ */
+}
+
+/* ตกแต่งโลโก้ */
+.logo-cell img {
+    height: 60px;
+    vertical-align: middle;
+    margin-right: 10px;
+
+}
+.logo-cell  span {
+    font-size: 18px;
+    font-weight: bold;
+}
+table {
+ 
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: auto;
+}
+
+ td {
+    border: 2px solid #100000;
+    padding: 8px;
+    
+    text-align: start;        /* จัดกลางแนวนอน */
+  vertical-align: middle;
+}
+
+th {
+    border: 2px solid #100000;
+    padding: 8px;
+    
+    text-align: center;        /* จัดกลางแนวนอน */
+  vertical-align: middle;
+   
+}
+.container {
+  display: flex;
+  font-size: 18px;
+  gap: 300px; /* ระยะห่างระหว่างข้อความ */
+  align-items: center; 
+  margin: 15px; /* จัดให้อยู่กลางบรรทัดในแนวตั้ง */
+}
+
+/* จัดการกล่องหุ้ม Checkbox */
+.checkbox-container, .checkbox-grid {
+    display: flex;
+    flex-wrap: wrap; /* ให้ขึ้นบรรทัดใหม่เมื่อพื้นที่ไม่พอ */
+    gap: 10px 20px;  /* ระยะห่าง แถว และ คอลัมน์ */
+    margin-top: 8px;
+    padding-left: 15px;
+}
+
+/* จัดให้ Checkbox กับข้อความตรงกันแนวตั้ง */
+.check-item {
+    display: flex;
+    align-items: center; /* จัดกึ่งกลางแนวตั้ง */
+    font-size: 14px;
+    cursor: pointer;
+    white-space: nowrap; /* ห้ามข้อความตัดบรรทัดแยกจาก Checkbox */
+}
+
+.check-item input[type="checkbox"] {
+    margin-right: 8px;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+/* ปรับช่องหมายเหตุในตาราง */
+.admin-input[type="text"] {
+    width: 100%;
+    border: 1px solid transparent;
+    background: transparent;
+    padding: 5px;
+}
+
+.admin-mode .admin-input[type="text"]:focus {
+    border-bottom: 1px solid #2196f3;
+    background: #fff;
+    outline: none;
+}
+h4 {
+    color: #110000; /* สีของหัวข้อ */
+    text-decoration: underline;
+}
+p2 {
+    color: #110000; /* สีของหัวข้อ */
+    font-size: 14px; /* ขนาดตัวอักษร */
+    padding: 75px;
+}
+
+
+/* ช่องของ User */
+.footer{
+  
+    justify-content: center;
+    
+    margin-top: 0%;
+    font-size: 18px;
+      font-family: 'Sarabun', sans-serif;
+
+}
+ 
+        /* ฝั่งซ้าย: รายการ Checkbox */
+        .checklist-section {
+            width: 60%;
+            padding-right: 20px;
+            border: 2px solid #100000;
+    padding: 3px;
+    
+    text-align: start;        /* จัดกลางแนวนอน */
+  vertical-align: middle;
+        }
+ .signature-line {
+            border-bottom: 1px dotted #000;
+            width: 180px;
+            display: inline-block;
+            margin: 0 10px; 
+        } 
+    
+        textarea { /*อื่นๆ*/
+            width: 10%;
+            height: 15px;
+            vertical-align: middle;
+        }
+        /* อัพFile */
+        .upload-section {
+    width: 45%;
+    padding: 0; /* ล้าง padding เพื่อให้เส้นคั่นชิดขอบ */
+}
+
+.sign-box {
+    height: 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+}
+
+.top-border {
+    border-bottom: 1px solid black;
+}
+
+.upload-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+}
+
+.role-text {
+    font-size: 12px;
+    margin-top: 10px;
+    color: #333;
+}
+/* สไตล์ปกติของช่องกรอกในตาราง */
+.admin-input {
+    width: 100%;
+    /* ซ่อนขอบไว้ก่อนให้ดูเหมือนตารางปกติ */
+    background: transparent;
+    padding: 5px;
+    transition: all 0.2s;
+}
+
+/* เมื่อเป็น Admin และเอาเมาส์ไปชี้ (Hover) */
+.admin-mode .admin-input:hover:not(:disabled) {
+    background-color: #fff9c4; /* สีเหลืองอ่อนให้รู้ว่าแก้ได้ */
+    border: 1px solid #ffca28;
+    cursor: edit;
+}
+
+/* เมื่อ Admin คลิกเข้าไปพิมพ์ (Focus) */
+.admin-mode .admin-input:focus {
+    background-color: #ffffff;
+    border: 1px solid #007bff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0,123,255,0.5);
+}
+
+/* สำหรับปุ่มเรียกดูไฟล์ของ Admin */
+.admin-mode .view-btn:not(:disabled) {
+    background-color: #a6d8a8;
+    border: 2px solid #64de6a;
+    animation: pulse 2s infinite; /* เพิ่มลูกเล่นปุ่มเต้นเบาๆ ให้ Admin รู้ว่าต้องกด */
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+/* สไตล์สำหรับช่องที่ถูกล็อกเมื่อ Admin เข้าดู */
+.locked-view {
+    cursor: default;
+    background-color: transparent !important;
+    border: none !important;
+    color: #000 !important;
+    opacity: 1 !important; /* ให้ตัวหนังสือชัดเจน ไม่เป็นสีเทาจาง */
+}
+
+/* ซ่อนเส้นประหรือขอบในช่องลงชื่อ เมื่อ Admin ดู */
+.admin-mode .user-input.signature-line {
+    border-bottom: 1px solid #333;
+    pointer-events: none; /* ป้องกันการคลิก */
+}
+
+/* ตกแต่ง Checkbox ที่ถูกล็อก */
+.admin-mode input[type="checkbox"]:disabled {
+    accent-color: #333; /* ปรับสีติ๊กถูกให้เข้มชัดเจน */
+    filter: contrast(1.2);
+}
+.action-btn {
+    padding: 5px 15px;
+    background-color: #fff;
+    border: 1px solid #2196f3;
+    color: #2196f3;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.action-btn:hover {
+    background-color: #e3f2fd;
+}
+
+/* เมื่ออยู่ในโหมดแก้ไข ให้ข้อความดูเหมือนช่องกรอก */
+.can-edit[contenteditable="true"] {
+    padding: 2px 5px;
+    min-width: 50px;
+    display: inline-block;
+}
+/* button */
+.action-bar {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        padding: 15px 25px;
+        background-color: #ffffff;
+        border-bottom: 1px solid #e0e0e0;
+        margin-bottom: 20px;
+    }
+
+    /* สไตล์ปุ่มแบบไอคอนที่ดูสะอาดตา */
+    .btn-icon-wrapper {
+        background: white;
+        border: 1px solid #dcdcdc;
+        border-radius: 6px;
+        padding: 8px;
+        cursor: pointer;
+        transition: all 0.2s ease-in-out;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 50px;
+        height: 50px;
+    }
+
+    .btn-icon-wrapper:hover {
+        background-color: #f5f5f5;
+        border-color: #2196f3;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        transform: translateY(-2px);
+    }
+
+    .btn-icon-wrapper img {
+        width: 30px;
+        height: 30px;
+        object-fit: contain;
+    }
+
+    /* ปุ่มพิเศษสำหรับ Admin */
+    .btn-admin-edit {
+        padding: 10px 2px;
+        background-color: #2196f3;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-weight: 500;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .btn-admin-edit:hover { background-color: #1976d2; }
+
+    /* ซ่อนส่วนที่ไม่จำเป็นตอนพิมพ์ */
+    @media print {
+        .action-bar, .admin-tools { display: none !important; }
+        body { background: white; }
+    }
+    @media print {
+    /* 1. กำหนดขนาดกระดาษ A4 */
+    @page {
+        size: A4;
+        margin: 1cm; /* ปรับขอบกระดาษให้เล็กลงเพื่อเพิ่มพื้นที่ */
+    }
+
+    /* 2. บังคับให้ตารางกว้างพอดีกระดาษ 100% ไม่ขาดไม่เกิน */
+    body {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        font-size: 12pt; /* ปรับขนาดตัวอักษรให้มาตรฐานงานพิมพ์ */
+    }
+
+    .main-table {
+        width: 100% !important;
+        table-layout: fixed; /* บังคับให้คอลัมน์เฉลี่ยพื้นที่ตามที่กำหนด */
+        border-collapse: collapse;
+    }
+
+    /* 3. ซ่อนส่วนที่ไม่เกี่ยวข้อง เช่น ปุ่มกดต่างๆ */
+    .button-container, .action-bar, #admin-panel, .btn-icon-wrapper {
+        display: none !important;
+    }
+
+    /* 4. จัดการไม่ให้ตารางถูกตัดแบ่งบรรทัดแบบน่าเกลียด */
+    tr {
+        page-break-inside: avoid;
+    }
+
+    /* 5. ปรับความกว้างคอลัมน์ลำดับให้แคบลงเพื่อเพิ่มพื้นที่ข้อความ */
+    .col-no { width: 40px !important; }
+}

@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STS Group</title>
+<link rel="stylesheet" href="style.css">
+<link rel="icon" type="image-icon" href="sts-image.png">
+</head>
+<body onload="checkRole()">
+    <table class="Header">
+        <tr>
+           <td class="logo-cell">
+            <img src="img/sts-image.png" alt="sts-image">
+            <span>STS Group</span>
+        </td>
+        
+        <td class="title-cell">รายการตรวจสอบเครื่องคอมพิวเตอร์ก่อนส่งมอบ</td>
+        
+        <td class="info-cell">
+            <div class="top-row">FM-IT-001 Rev.01</div>
+            <div class="bottom-row">Effective Date 26/03/2025</div>
+        </td>
+    </tr>
+
+    </table>
+
+    <div class="container">
+  <span>เลขที่ทรัพย์สิน : 402-25-0015</span>
+  <span>ชื่อเครื่อง : NB25-PRO0015</span>
+</div>
+<div id="admin-controls" style="display: none; padding: 10px; background: #fdf6e3; border: 1px solid #eee; margin-bottom: 10px;">
+    <strong>เครื่องมือผู้ดูแลระบบ:</strong> 
+    <button type="button" id="edit-mode-btn" onclick="toggleEditMode()" class="action-btn">
+        <span class="material-symbols-outlined" style="vertical-align: middle;">edit</span> เปิดโหมดแก้ไขข้อความ
+    </button>
+    <span id="edit-status" style="margin-left: 10px; color: red; font-weight: bold; display: none;">[ กำลังอยู่ในโหมดแก้ไข ]</span>
+</div>
+<table class="main-table">
+    <thead>
+        <tr>
+            <th class="col-no">ลำดับ</th> <th>หัวข้อรายการตรวจสอบ</th>
+            <th style="width: 120px;">ผลการตรวจสอบ</th>
+        </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td style="text-align: center;">1</td>
+        <td class="can-edit">สำหรับเครื่องเก่า : ตรวจสอบข้อมูลเก่ากับทางต้นสังกัด</td>
+        <td><input type="text" class="admin-input" placeholder=""></td>    
+    </tr>
+    <tr>
+        <td style="text-align: center;">2</td>
+        <td class="can-edit">สำหรับเครื่องใหม่ : Format Storage แบ่ง 2 partition ตั้งเป็น drives C&D</td>
+        <td><input type="text" class="admin-input" placeholder=""></td>
+    </tr>
+    <tr>
+    <td style="text-align: center;">3</td>
+    <td>
+        <div class="can-edit">ติดตั้งระบบปฏิบัติการ</div>
+        <div class="checkbox-container">
+            <label class="check-item"><input type="checkbox" class="admin-input"> Windows 10</label>
+            <label class="check-item"><input type="checkbox" class="admin-input"> Windows 11</label>
+        </div>
+    </td>
+    <td><input type="text" class="admin-input" placeholder=""></td>
+</tr>
+
+<tr>
+    <td style="text-align: center;">4</td>
+    <td>
+        <div class="can-edit">ติดตั้งโปรแกรมพื้นฐาน</div>
+        <div class="checkbox-grid">
+            <label class="check-item"><input type="checkbox" class="admin-input"> Ms Office 365</label>
+            <label class="check-item"><input type="checkbox" class="admin-input"> Adobe Reader</label>
+            <label class="check-item"><input type="checkbox" class="admin-input"> Formula ERP</label>
+            <label class="check-item"><input type="checkbox" class="admin-input"> GstarCAD</label>
+            <label class="check-item"><input type="checkbox" class="admin-input"> Kaspersky</label>
+            <label class="check-item"><input type="checkbox" class="admin-input"> Line</label>
+            <label class="check-item"><input type="checkbox" class="admin-input"> Foxit</label>
+            <label class="check-item"><input type="checkbox" class="admin-input"> 7-Zip</label>
+            <label class="check-item"><input type="checkbox" class="admin-input"> อื่นๆ(โปรดระบุ)</label>
+        </div>
+    </td>
+    <td><input type="text" class="admin-input" placeholder=""></td>
+</tr>
+        <tr>
+            <td style="text-align: center;">5</td>
+            <td class="can-edit">ตรวจสอบการติดตั้ง Drivers (LAN/VGA/USB)</td>
+            <td><input type="text" class="admin-input" placeholder=""></td>
+        </tr>
+        <tr>
+            <td style="text-align: center;">6</td>
+            <td class="can-edit">ตั้งชื่อคอมพิวเตอร์(Computer Name)</td>
+            <td><input type="text" class="admin-input" placeholder=""></td>
+        </tr>
+        <tr>
+            <td style="text-align: center;">7</td>
+            <td class="can-edit">Computer  ต้อง Join Domain(sts.local)</td>
+            <td><input type="text" class="admin-input" placeholder=""></td>
+        </tr>
+        <tr>
+            <td style="text-align: center;">8</td>
+            <td class="can-edit">กำหนดสิทธิ์ Account ของผู้ใช้เป็น user </td>
+            <td><input type="text" class="admin-input" placeholder=""></td>
+        </tr>
+        <tr>
+            <td style="text-align: center;">9</td>
+            <td class="can-edit">ตรวจสอบ date & time ให้ตรงกับปัจจุบันและ Time Zone ต้องเป็น GMT +7</td>
+            <td><input type="text" class="admin-input" placeholder=""></td>
+        </tr>
+        <tr>
+            <td style="text-align: center;">10</td>
+            <td class="can-edit">กำหนด Windows Automatic Update Tum : ON</td>
+            <td><input type="text" class="admin-input" placeholder=""></td>
+        </tr>
+        <tr>
+            <td style="text-align: center;">11</td>
+            <td class="can-edit">กำหนด ให้มี 2 ภาษา คือ อังกฤษ/ไทย โดยใช้ปุ่ม Grave Accent ในการเปลี่ยนภาษา</td>
+            <td><input type="text" class="admin-input" placeholder=""></td>
+        </tr>
+        <tr>
+            <td style="text-align: center;">12</td>
+            <td class="can-edit">ติดตั้งเครื่องปริ้นเตอร์ (โปรดระบุ)</td>
+            <td><input type="text" class="admin-input" placeholder=""></td>
+        </tr>
+        <tr>
+            <td style="text-align: center;">13</td>
+            <td class="can-edit">แบบฟอร์มการขอใช้คอมพิวเตอร์และระบบเครือข่ายบริษัท (FM-IT-002)</td>
+            <td><input type="text" class="admin-input" placeholder=""></td>
+        </tr>
+    </tbody>
+</table>
+
+<p><u>หมายเหตุ</u> : 1.สำหรับเครื่องใหม่ที่มี Storage มากกว่า 300GB จะแบ่งเป็น Driver:C 300GB ที่เหลือเป็น D</p>
+<p2>2."โปรแกรมพื้นฐาน"หมายถึง โปรแกรมที่มีสิทธิ์ และจัดซื้ออย่างถูกต้อง</p2>
+
+<table class="footer">
+    <tr>
+       <td class="checklist-section">
+    <strong>ผู้รับมอบทดสอบการใช้งานดังนี้</strong><br><br>
+    <input type="checkbox" class="user-input"> สามารถ Login เข้าเครื่องได้<br>
+    <input type="checkbox" class="user-input"> สามารถใช้งานโปรแกรมพื้นฐานได้<br>
+    <input type="checkbox" class="user-input"> สามารถเข้าใช้งาน File sharing ได้<br>
+    <input type="checkbox" class="user-input"> อื่นๆ <textarea class="user-input"></textarea>
+    <br><br>
+    <div style="text-align: right;">
+        ลงชื่อ <input type="text" class="user-input signature-line"> ผู้รับมอบ<br>
+        วันที่รับมอบ <input type="date" class="user-input signature-line">
+    </div>
+</td>
+
+        <td class="upload-section">
+            <div class="sign-box top-border">
+                <div class="upload-controls">
+                    <input type="file" id="itFile" accept="image/*" onchange="checkFile(this, 'btnIt')">
+                    <button type="button" id="btnIt" class="view-btn" onclick="viewFile('itFile')" disabled>เรียกดูไฟล์</button>
+                </div>
+                <p class="role-text">เจ้าหน้าที่ IT ผู้ดำเนินการ</p>
+            </div>
+
+            <div class="sign-box">
+                <div class="upload-controls">
+                    <input type="file" id="mgrFile" accept="image/*" onchange="checkFile(this, 'btnMgr')">
+                    <button type="button" id="btnMgr" class="view-btn" onclick="viewFile('mgrFile')" disabled>เรียกดูไฟล์</button>
+                </div>
+                <p class="role-text">ผู้จัดการแผนกบริหารจัดการระบบ IT ผู้ตรวจสอบ</p>
+            </div>
+        </td>
+    </tr>
+</table>
+<br>
+<div id="admin-controls" style="display:none; padding: 10px; background: #eee; margin-bottom: 10px;">
+    <button id="edit-mode-btn" onclick="toggleEditMode()">เปิดโหมดแก้ไขข้อความ</button>
+    <button onclick="generateUserLink()">สร้างลิงก์ให้ User</button>
+</div>
+
+
+
+<div class="action-bar">
+    <div class="btn-icon-wrapper" onclick="window.location.href='login.html'" title="ย้อนกลับ">
+        <img src="img/back-button.png" alt="Back">
+    </div>
+    <div class="button-container no-print">
+    <button type="button" class="btn-save" onclick="saveUserData()">
+        <span class="material-symbols-outlined">save</span> บันทึกข้อมูลเข้าเครื่อง
+    </button>
+    
+    <button type="button" onclick="window.print()">
+        <img src="img/printer.png" width="30">
+    </button>
+</div>
+
+    <div class="btn-icon-wrapper" onclick="window.location.href='preview.html'" title="ดูตัวอย่าง">
+<script>
+    // ฟังก์ชันบันทึกข้อมูล (ใส่ในหน้า Checklist)
+function saveUserData() {
+    // 1. ระบุชื่อ User หรือ ID (อาจจะดึงมาจากตัวแปรหรือ Input ชื่อผู้ใช้งาน)
+    const userName = document.querySelector('.signature-line').value || 'UnknownUser';
+    
+    // 2. ดึงข้อมูลจาก Input ต่างๆ (ต้องเช็คว่า ID ตรงกับใน HTML ของคุณไหม)
+    const data = {
+        login: document.querySelector('#check-login')?.checked || false,
+        software: document.querySelector('#check-software')?.checked || false,
+        sharing: document.querySelector('#check-sharing')?.checked || false,
+        otherText: document.querySelector('#input-other')?.value || "",
+        lastUpdate: new Date().toLocaleString('th-TH'),
+        status: "เสร็จสมบูรณ์"
+    };
+
+    // 3. บันทึกลง LocalStorage
+    localStorage.setItem(`data_${userName}`, JSON.stringify(data));
+    
+    alert("บันทึกข้อมูลของ " + userName + " เรียบร้อยแล้ว!");
+}
+    window.onload = function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const role = urlParams.get('role');
+
+    // ถ้าเปิดหน้า index.html มาลอยๆ โดยไม่มี ?role=... 
+    // ให้เด้งไปที่หน้า login.html ทันที
+    if (!role) {
+        window.location.href = 'login.html';
+    } else {
+        checkRole(); // ทำงานตามสิทธิ์ที่ส่งมา (ฟังก์ชันเดิมของคุณ)
+    }
+}
+    // ฟังก์ชันเปิด-ปิดปุ่มเรียกดู
+    function checkFile(input, btnId) {
+        const btn = document.getElementById(btnId);
+        btn.disabled = input.files.length === 0;
+    }
+
+    // ฟังก์ชันเปิดไฟล์ดูใน Tab ใหม่เพื่อรีเช็ค
+    function viewFile(inputId) {
+        const file = document.getElementById(inputId).files[0];
+        if (file) {
+            const url = URL.createObjectURL(file);
+            window.open(url, '_blank');
+        }
+    }
+   
+</script>
+      <script src="script.js"></script>
+</body> 
+
+   
+
+</html>
