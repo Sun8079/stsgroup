@@ -1,8 +1,13 @@
-let isEditEnabled = false; // สถานะโหมดแก้ไขข้อความ
+// นำเข้าเฉพาะฟังก์ชันที่จำเป็นจาก Firebase (ตรวจสอบ path ให้ตรงกับที่ใช้ใน login)
+import { getDatabase, ref, update, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-function checkRole() {
+let isEditEnabled = false;
+const assetId = "NB25-PRO0015"; // หรือดึงจาก URL ก็ได้
+
+async function checkRole() {
     const params = new URLSearchParams(window.location.search);
     const role = params.get('role') || 'user';
+    const userName = params.get('name'); // ดึงชื่อที่ส่งมาจากหน้า Login
     const isAdmin = role === 'admin';
     
     const adminPanel = document.getElementById('admin-controls');
@@ -10,75 +15,97 @@ function checkRole() {
     const userInputs = document.querySelectorAll('.user-input');
     const editableTexts = document.querySelectorAll('.can-edit');
 
+    // เติมชื่อผู้ใช้งานในช่องลงชื่ออัตโนมัติ (ถ้ามีค่าส่งมา)
+    const sigInput = document.querySelector('.signature-line');
+    if (sigInput && userName) {
+        sigInput.value = decodeURIComponent(userName);
+    }
+
     if (isAdmin) {
-        // --- โหมด ADMIN ---
-        document.body.classList.add('admin-mode');
-        if (adminPanel) adminPanel.style.display = 'block';
+    // --- โหมด ADMIN (IT) ---
+    document.body.classList.add('admin-mode');
+    if (adminPanel) adminPanel.style.display = 'block';
+    
+    // Admin แก้ไขส่วนตรวจเช็ค IT ได้ แต่ห้ามแก้ส่วนที่ User ต้องติ๊กเอง
+    adminInputs.forEach(el => el.disabled = false); 
+    userInputs.forEach(el => el.disabled = true); 
+    
+} else {
+    // --- โหมด USER (ผู้รับมอบ) ---
+    document.body.classList.remove('admin-mode');
+    if (adminPanel) adminPanel.style.display = 'none';
 
-        // Admin จัดการส่วนของตนเองได้ (ติ๊ก IT / ดูไฟล์)
-        adminInputs.forEach(el => el.disabled = false);
+    // User ห้ามแก้ส่วนที่ IT ตรวจมาแล้ว แต่ต้องทำส่วนการทดสอบเอง
+    adminInputs.forEach(el => el.disabled = true); 
+    userInputs.forEach(el => el.disabled = false); 
+}
+        // ดึงข้อมูลที่ Admin เคยบันทึกไว้ใน Firebase มาแสดงผลให้ User เห็น
+        const db = getDatabase();
+        const snapshot = await get(ref(db, `checklists/${assetId}/adminData`));
+        if (snapshot.exists()) {
+            const adminData = snapshot.val();
+            adminInputs.forEach((el, index) => {
+                const val = adminData[`item_${index}`];
+                if (el.type === 'checkbox') el.checked = val;
+                else el.value = val || "";
+            });
+        }
 
-        // ล็อกส่วน User (Admin ดูได้อย่างเดียว ห้ามแก้เช็คลิสต์ที่ User ต้องทำ)
-        userInputs.forEach(el => {
-            el.disabled = true;
-            el.classList.add('locked-view');
-        });
-
-        // หัวข้อข้อความ: เริ่มต้นให้ล็อกไว้ก่อน (จนกว่าจะกดปุ่ม Edit)
-        editableTexts.forEach(el => el.contentEditable = "false");
-
-    } else {
-        // --- โหมด USER ---
-        document.body.classList.remove('admin-mode');
-        if (adminPanel) adminPanel.style.display = 'none';
-
-        // 1. รับค่าที่ Admin ติ๊กส่งมาใน URL (ถ้ามี)
-        if (params.has('it1')) document.getElementById('it-check1').checked = (params.get('it1') === 'true');
-        if (params.has('it2')) document.getElementById('it-check2').checked = (params.get('it2') === 'true');
-
-        // 2. ล็อกส่วนของ Admin (User แก้ของ IT ไม่ได้)
         adminInputs.forEach(el => el.disabled = true);
-
-        // 3. ปลดล็อกส่วนของ User (ให้ User ติ๊กและลงชื่อได้)
-        userInputs.forEach(el => {
-            el.disabled = false;
-            el.classList.remove('locked-view');
-        });
-
-        // 4. ล็อกหัวข้อข้อความถาวรสำหรับ User
+        userInputs.forEach(el => el.disabled = false);
         editableTexts.forEach(el => el.contentEditable = "false");
     }
+
+
+// ฟังก์ชันบันทึกข้อมูลลง Firebase
+window.saveData = function() {
+    const params = new URLSearchParams(window.location.search);
+    const role = params.get('role');
+    const db = getDatabase();
+    const updates = {};
+
+    if (role === 'admin') {
+        const adminData = {};
+        document.querySelectorAll('.admin-input').forEach((el, index) => {
+            adminData[`item_${index}`] = el.type === 'checkbox' ? el.checked : el.value;
+        });
+        updates[`checklists/${assetId}/adminData`] = adminData;
+    } else {
+        const userData = {
+            signature: document.querySelector('.signature-line')?.value || "",
+            date: new Date().toLocaleDateString('th-TH'),
+            status: "Completed"
+        };
+        updates[`checklists/${assetId}/userData`] = userData;
+    }
+
+    update(ref(db), updates)
+        .then(() => alert("บันทึกข้อมูลลงระบบเรียบร้อย!"))
+        .catch(err => alert("เกิดข้อผิดพลาด: " + err.message));
 }
 
-// ฟังก์ชันสำหรับ Admin: กดเพื่อเริ่ม/หยุด การแก้ไขหัวข้อข้อความ
-function toggleEditMode() {
+// ฟังก์ชันสร้างลิงก์ (เพิ่มชื่อ Admin ไปด้วยเพื่อให้ User รู้ว่าใครส่งมา)
+window.generateUserLink = function() {
+    const params = new URLSearchParams(window.location.search);
+    const adminName = params.get('name') || "";
+    const baseUrl = window.location.origin + window.location.pathname;
+    const shareUrl = `${baseUrl}?role=user&id=${assetId}&from=${encodeURIComponent(adminName)}`;
+    
+    prompt("คัดลอกลิงก์นี้ส่งให้ User:", shareUrl);
+}
+
+window.toggleEditMode = function() {
     isEditEnabled = !isEditEnabled;
     const editableTexts = document.querySelectorAll('.can-edit');
     const btn = document.getElementById('edit-mode-btn');
 
     editableTexts.forEach(el => {
         el.contentEditable = isEditEnabled;
-        // ไฮไลท์สีเพื่อให้ Admin รู้ว่าช่องไหนแก้ได้บ้าง
         el.style.backgroundColor = isEditEnabled ? "#fff9c4" : "transparent";
         el.style.border = isEditEnabled ? "1px dashed orange" : "none";
     });
 
-    btn.innerHTML = isEditEnabled ? 
-        '<span class="material-symbols-outlined">save</span> ปิดโหมดแก้ไข' : 
-        '<span class="material-symbols-outlined">edit</span> เปิดโหมดแก้ไขข้อความ';
+    btn.innerHTML = isEditEnabled ? 'ปิดโหมดแก้ไข' : 'เปิดโหมดแก้ไขข้อความ';
 }
 
-// ฟังก์ชันสำหรับ Admin: สร้างลิงก์ส่งต่อให้ User
-function generateUserLink() {
-    const itCheck1 = document.getElementById('it-check1').checked;
-    const itCheck2 = document.getElementById('it-check2').checked;
-    
-    const baseUrl = window.location.origin + window.location.pathname;
-    // พ่วงสถานะ it1, it2 และเปลี่ยน role เป็น user
-    const shareUrl = `${baseUrl}?role=user&it1=${itCheck1}&it2=${itCheck2}`;
-    
-    prompt("ก๊อปปี้ลิงก์นี้ส่งให้ User ทาง Line/Email:", shareUrl);
-}
-
-// เรียกใช้งานเมื่อโหลดหน้าเว็บ
 window.onload = checkRole;

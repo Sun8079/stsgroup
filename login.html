@@ -2,48 +2,38 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <title>เข้าสู่ระบบ - STS Group</title>
-    <link rel="stylesheet" href="login.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เข้าสู่ระบบ | STS Group</title>
+    <link rel="stylesheet" href="login.css"> <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
-<body class="login-body">
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <img src="img/sts-image.png" alt="STS Logo" class="logo"> <h1>STS Group</h1>
+                <p>Digital Checklist System</p>
+            </div>
+            
+            <div class="input-group">
+                <label for="username">ชื่อผู้ใช้งาน</label>
+                <input type="text" id="username" placeholder="กรอก Username" required>
+            </div>
 
-<div class="login-card">
-    <img src="img/sts-image.png" alt="logo" class="login-logo">
-    <h2>STS Group </h2>
-    <p>กรุณากรอกรหัสพนักงานเพื่อเข้าสู่ระบบ</p>
-    
-    <div class="input-group">
-        <input type="text" id="username" placeholder="ชื่อผู้ใช้งาน (User / Admin)">
-        <input type="password" id="password" placeholder="รหัสผ่าน">
+            <div class="input-group">
+                <label for="passcode">รหัสผ่าน</label>
+                <input type="password" id="passcode" placeholder="กรอก Passcode" required>
+            </div>
+            <div>  
+                 <button class="contact-btn"> 
+                <a href="mailto:youremail@example.com" >Contact Us</a></button>
+            </div>
+
+
+<button id="btnLogin" class="btn-login">เข้าสู่ระบบ</button>            
+            <div id="error-msg" class="error-text">ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง</div>
+        </div>
     </div>
 
-    <button onclick="handleLogin()" class="login-btn">เข้าสู่ระบบ</button>
-    <p id="error-msg" style="color: red; display: none; font-size: 14px; margin-top: 10px;">
-        รหัสผ่านไม่ถูกต้อง!
-    </p>
-</div>
-
-<script>
-function handleLogin() {
-    const user = document.getElementById('username').value.toLowerCase();
-    const pass = document.getElementById('password').value;
-    const error = document.getElementById('error-msg');
-
-    // ระบบตรวจสอบจำลอง (ในใช้งานจริงต้องใช้ Database)
-    if (user === 'admin' && pass === '1234') {
-        // ถ้าเป็น Admin ให้ไปหน้าตารางพร้อมแนบสิทธิ์ admin
-        window.location.href = 'index.html?role=admin';
-    } 
-    else if (user === 'user') {
-        // ถ้าเป็น User ทั่วไป (ไม่ต้องใช้รหัสผ่าน หรือกำหนดไว้ก็ได้)
-        window.location.href = 'index.html?role=user';
-    } 
-    else {
-        // ถ้าข้อมูลไม่ถูกต้อง
-        error.style.display = 'block';
-    }
-}
-</script>
-
+    <script type="module" src="firebase.js"></script> 
 </body>
 </html>

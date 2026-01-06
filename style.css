@@ -360,3 +360,31 @@ p2 {
     /* 5. ปรับความกว้างคอลัมน์ลำดับให้แคบลงเพื่อเพิ่มพื้นที่ข้อความ */
     .col-no { width: 40px !important; }
 }
+/* จัดตารางให้จบในแผ่นเดียวเวลาพิมพ์ */
+@media print {
+    .no-print, #admin-controls, .action-bar { display: none !important; }
+    body { font-size: 11pt; margin: 0; }
+    .main-table { width: 100%; border-collapse: collapse; }
+}
+
+/* ปรับ Checkbox ให้ประหยัดพื้นที่และตรงข้อความ (รูป 9a4cfd) */
+.checkbox-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* แบ่ง 3 คอลัมน์ */
+    gap: 5px;
+    padding: 10px;
+}
+
+.check-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+}
+
+/* ส่วนท้ายกระดาษ (รูป 99ee2c) */
+.footer-table {
+    width: 100%;
+    border: 1px solid black;
+    margin-top: 10px;
+}

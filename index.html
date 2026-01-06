@@ -40,7 +40,7 @@
     <thead>
         <tr>
             <th class="col-no">ลำดับ</th> <th>หัวข้อรายการตรวจสอบ</th>
-            <th style="width: 120px;">ผลการตรวจสอบ</th>
+            <th style="width: 350px;">ผลการตรวจสอบ</th>
         </tr>
     </thead>
     <tbody>
@@ -132,7 +132,7 @@
     </tbody>
 </table>
 
-<p><u>หมายเหตุ</u> : 1.สำหรับเครื่องใหม่ที่มี Storage มากกว่า 300GB จะแบ่งเป็น Driver:C 300GB ที่เหลือเป็น D</p>
+<p><u>หมายเหตุ</u> : 1.สำหรับเครื่องใหม่ที่มี Storage มากกว่า 300GB จะแบ่งเป็น Driver:C 300GB ที่เหลือเป็น Driver:D</p>
 <p2>2."โปรแกรมพื้นฐาน"หมายถึง โปรแกรมที่มีสิทธิ์ และจัดซื้ออย่างถูกต้อง</p2>
 
 <table class="footer">
@@ -182,9 +182,11 @@
         <img src="img/back-button.png" alt="Back">
     </div>
     <div class="button-container no-print">
-    <button type="button" class="btn-save" onclick="saveUserData()">
-        <span class="material-symbols-outlined">save</span> บันทึกข้อมูลเข้าเครื่อง
-    </button>
+    <script type="module" src="script.js"></script>
+
+<button type="button" class="btn-save" onclick="saveUserData()">
+    <span class="material-symbols-outlined">save</span> บันทึกข้อมูลขึ้น Cloud
+</button>
     
     <button type="button" onclick="window.print()">
         <img src="img/printer.png" width="30">
@@ -213,18 +215,26 @@ function saveUserData() {
     
     alert("บันทึกข้อมูลของ " + userName + " เรียบร้อยแล้ว!");
 }
-    window.onload = function() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const role = urlParams.get('role');
+   // script.js (หรือใส่ใน index.html)
+window.onload = function() {
+    const params = new URLSearchParams(window.location.search);
+    const userName = params.get('name');
+    const role = params.get('role');
 
-    // ถ้าเปิดหน้า index.html มาลอยๆ โดยไม่มี ?role=... 
-    // ให้เด้งไปที่หน้า login.html ทันที
+    // ถ้าไม่มี Role ให้เด้งกลับไป Login (ระบบป้องกัน)
     if (!role) {
         window.location.href = 'login.html';
-    } else {
-        checkRole(); // ทำงานตามสิทธิ์ที่ส่งมา (ฟังก์ชันเดิมของคุณ)
+        return;
     }
-}
+
+    // เติมชื่อผู้ใช้งานในช่องลงชื่อผู้รับมอบให้อัตโนมัติ (จากรูป image_99ee2c)
+    const sigInput = document.querySelector('.signature-line');
+    if (sigInput && userName) {
+        sigInput.value = userName;
+    }
+};
+
+
     // ฟังก์ชันเปิด-ปิดปุ่มเรียกดู
     function checkFile(input, btnId) {
         const btn = document.getElementById(btnId);
