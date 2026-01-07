@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - สรุปรายการตรวจสอบ</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;700&display=swap">
+    <link rel="stylesheet" href="preview.css">
+</head>
+<body>
+
+<div class="container">
+    <header class="header">
+        <div class="logo-area">
+            <img src="img/sts-image.png" alt="STS Logo">
+            <h2>รายงานสรุปสถานะรายบุคคล (Preview)</h2>
+        </div>
+        <div class="action-bar no-print">
+            <button  class="icon-btn" data-goto="index.html">
+                <img src="img/back-button.png" alt="">
+            </button>
+            
+            <button class="icon-btn" id="btnPrint" title="พิมพ์สรุป">
+                <img src="img/printer.png" alt="Print">
+            </button>
+            
+        </div>
+    </header>
+
+    <section class="search-section no-print">
+        <div class="search-container">
+            <input type="text" id="search-input" placeholder="🔍 ค้นหาชื่อผู้รับมอบ หรือเลขทรัพย์สิน...">
+        </div>
+    </section>
+
+    <div class="table-responsive">
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 5%;">ลำดับ</th>
+                    <th style="width: 25%;">ชื่อผู้รับมอบ / ทรัพย์สิน</th>
+                    <th style="width: 45%;">สถานะการทดสอบสำคัญ (User)</th>
+                    <th style="width: 25%;">สถานะรวม</th>
+                </tr>
+            </thead>
+            <tbody id="table-body">
+                <tr><td colspan="4" style="text-align:center;">กำลังโหลดข้อมูลจากระบบ...</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <footer class="footer no-print">
+        <p>พิมพ์เมื่อวันที่: <span id="current-date"></span></p>
+    </footer>
+</div>
+
+
+
+</body>
+<script type="module" src="preview.js"></script>
+</html>

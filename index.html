@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STS Group</title>
+<link rel="stylesheet" href="style.css">
+<link rel="icon" type="image-icon" href="img/sts-image.png">
+</head>
+<script>
+// หากเปิด root หรือ index.html โดยไม่มีพารามิเตอร์ role ให้ไปหน้า login ก่อนเสมอ
+// และต้องพา id ไปด้วยเพื่อไม่ให้ข้อมูลหายระหว่างทาง
+(function(){
+    try {
+        const params = new URLSearchParams(window.location.search);
+        const role = params.get('role');
+        const id = params.get('id');
+        const p = window.location.pathname.split('/').pop();
+        const isIndex = p === '' || p === 'index.html';
+        if (isIndex && !role) {
+            let target = 'login.html';
+            if (id) target += `?id=${encodeURIComponent(id)}`;
+            window.location.replace(target);
+        }
+    } catch (e) {
+        // ถ้ามีปัญหาใด ๆ ให้ไม่ขัดขวางการโหลดหน้า
+        console.error('redirect script error', e);
+    }
+})();
+</script>
+</head>
+<body >
+    <table class="Header">
+        <tr>
+           <td class="logo-cell">
+            <img src="img/sts-image.png" alt="sts-image">
+            <span>STS Group</span>
+        </td>
+        
+        <td class="title-cell">รายการตรวจสอบเครื่องคอมพิวเตอร์ก่อนส่งมอบ</td>
+        
+        <td class="info-cell">
+            <div class="top-row">FM-IT-001 Rev.01</div>
+            <div class="bottom-row">Effective Date 26/03/2025</div>
+        </td>
+    </tr>
+
+    </table>
+
+    <div class="container">
+  <span>เลขที่ทรัพย์สิน : 402-25-0015</span>
+  <span>ชื่อเครื่อง : NB25-PRO0015</span>
+</div>
+<div id="admin-controls" style="display: none; padding: 10px; background: #fdf6e3; border: 1px solid #eee; margin-bottom: 10px;">
+    <strong>เครื่องมือผู้ดูแลระบบ:</strong>
+    <!-- ปุ่มควบคุม -->
+    <button id="edit-mode-btn">เปิดโหมดแก้ไขข้อความ</button>
+    <span class="edit-status" style="margin-left: 10px; color: red; font-weight: bold; display: none;">[ กำลังอยู่ในโหมดแก้ไข ]</span>
+
+    <!-- Search by user name (admin only) -->
+    <div id="search-area" style="margin-top:10px;">
+        <input type="text" id="search-name" placeholder="ค้นหาชื่อผู้รับมอบ" style="padding:6px; width:220px;">
+        <button id="search-btn" class="btn-save">ค้นหา</button>
+        <div id="search-results" style="margin-top:8px;"></div>
+    </div>
+</div>
+<table class="main-table">
+    <thead>
+        <tr>
+            <th class="col-no">ลำดับ</th>
+             <th>หัวข้อรายการตรวจสอบ</th>
+            <th style="width: 295px;">ผลการตรวจสอบ</th>
+        </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td style="text-align: center;">1</td>
+        <td class="can-edit">สำหรับเครื่องเก่า : ตรวจสอบข้อมูลเก่ากับทางต้นสังกัด</td>
+        <td><input type="text" class="admin-input" placeholder=""></td>    
+    </tr>
+    <tr>
+        <td style="text-align: center;">2</td>
+        <td class="can-edit">สำหรับเครื่องใหม่ : Format Storage แบ่ง 2 partition ตั้งเป็น drives C&D</td>
+        <td><input type="text" class="admin-input" placeholder=""></td>
+    </tr>
+    <tr>
+    <td style="text-align: center;">3</td>
+    <td>
+        <div class="can-edit">ติดตั้งระบบปฏิบัติการ</div>
+        <div class="checkbox-container">
+            <label class="check-item"><input type="checkbox" class="admin-input"> Windows 10</label>
+            <label class="check-item"><input type="checkbox" class="admin-input"> Windows 11</label>
+        </div>
+    </td>
+    <td><input type="text" class="admin-input" placeholder=""></td>
+</tr>
+
+<tr>
+    <td style="text-align: center;">4</td>
+    <td>
+        <div class="can-edit">ติดตั้งโปรแกรมพื้นฐาน</div>
+        <div class="checkbox-grid">
+            <label class="check-item"><input type="checkbox" class="admin-input"> Ms Office 365</label>
+            <label class="check-item"><input type="checkbox" class="admin-input"> Adobe Reader</label>
+            <label class="check-item"><input type="checkbox" class="admin-input"> Formula ERP</label>
+            <label class="check-item"><input type="checkbox" class="admin-input"> GstarCAD</label>
+            <label class="check-item"><input type="checkbox" class="admin-input"> Kaspersky</label>
+            <label class="check-item"><input type="checkbox" class="admin-input"> Line</label>
+            <label class="check-item"><input type="checkbox" class="admin-input"> Foxit</label>
+            <label class="check-item"><input type="checkbox" class="admin-input"> 7-Zip</label>
+            <label class="check-item"><input type="checkbox" class="admin-input"> อื่นๆ(โปรดระบุ)</label>
+        </div>
+    </td>
+    <td><input type="text" class="admin-input" placeholder=""></td>
+</tr>
+        <tr>
+            <td style="text-align: center;">5</td>
+            <td class="can-edit">ตรวจสอบการติดตั้ง Drivers (LAN/VGA/USB)</td>
+            <td><input type="text" class="admin-input" placeholder=""></td>
+        </tr>
+        <tr>
+            <td style="text-align: center;">6</td>
+            <td class="can-edit">ตั้งชื่อคอมพิวเตอร์(Computer Name)</td>
+            <td><input type="text" class="admin-input" placeholder=""></td>
+        </tr>
+        <tr>
+            <td style="text-align: center;">7</td>
+            <td class="can-edit">Computer  ต้อง Join Domain(sts.local)</td>
+            <td><input type="text" class="admin-input" placeholder=""></td>
+        </tr>
+        <tr>
+            <td style="text-align: center;">8</td>
+            <td class="can-edit">กำหนดสิทธิ์ Account ของผู้ใช้เป็น user </td>
+            <td><input type="text" class="admin-input" placeholder=""></td>
+        </tr>
+        <tr>
+            <td style="text-align: center;">9</td>
+            <td class="can-edit">ตรวจสอบ date & time ให้ตรงกับปัจจุบันและ Time Zone ต้องเป็น GMT +7</td>
+            <td><input type="text" class="admin-input" placeholder=""></td>
+        </tr>
+        <tr>
+            <td style="text-align: center;">10</td>
+            <td class="can-edit">กำหนด Windows Automatic Update Tum : ON</td>
+            <td><input type="text" class="admin-input" placeholder=""></td>
+        </tr>
+        <tr>
+            <td style="text-align: center;">11</td>
+            <td class="can-edit">กำหนด ให้มี 2 ภาษา คือ อังกฤษ/ไทย โดยใช้ปุ่ม Grave Accent ในการเปลี่ยนภาษา</td>
+            <td><input type="text" class="admin-input" placeholder=""></td>
+        </tr>
+        <tr>
+            <td style="text-align: center;">12</td>
+            <td class="can-edit">ติดตั้งเครื่องปริ้นเตอร์ (โปรดระบุ)</td>
+            <td><input type="text" class="admin-input" placeholder=""></td>
+        </tr>
+        <tr>
+            <td style="text-align: center;">13</td>
+            <td class="can-edit">แบบฟอร์มการขอใช้คอมพิวเตอร์และระบบเครือข่ายบริษัท (FM-IT-002)</td>
+            <td><input type="text" class="admin-input" placeholder=""></td>
+        </tr>
+    </tbody>
+</table>
+
+<p><u>หมายเหตุ</u> : 1.สำหรับเครื่องใหม่ที่มี Storage มากกว่า 300GB จะแบ่งเป็น Driver:C 300GB ที่เหลือเป็น Driver:D</p>
+<p2>2."โปรแกรมพื้นฐาน"หมายถึง โปรแกรมที่มีสิทธิ์ และจัดซื้ออย่างถูกต้อง</p2>
+
+<table class="footer">
+    <tr>
+       <tr>
+        <!-- ส่วนที่ user ต้องทำ -->
+    <td colspan="2">
+        <table style="width: 100%; border-collapse: collapse;">
+            <tr>
+                <td style="width: 50%; vertical-align: top; padding: 15px; border-right: 1px solid #ddd;">
+                    <!-- ส่วนผู้รับมอบทดสอบ -->
+                    <div class="test-section">
+                        <h3>ผู้รับมอบทดสอบการใช้งานดังนี้</h3>
+                        
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="test1" class="user-input">
+                            <label for="test1">สามารถ Login เข้าเครื่องได้</label>
+                        </div>
+                        
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="test2" class="user-input">
+                            <label for="test2">สามารถใช้งานโปรแกรมพื้นฐานได้</label>
+                        </div>
+                        
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="test3" class="user-input">
+                            <label for="test3">สามารถเข้าใช้งาน File sharing ได้</label>
+                        </div>
+                        
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="test4" class="user-input">
+                            <label for="test4">อื่นๆ</label>
+                            <input type="text" class="user-input" style="width: 0px; margin-left: 5px; padding: 3px 8px;" placeholder="ระบุ...">
+                        </div>
+                        
+                        <div class="signature-row">
+                            <div class="signature-field">
+                                <label>ลงชื่อ</label>
+                                <input type="text" class="signature-line user-input" placeholder="ระบุชื่อ">
+                                <label>ผู้รับมอบ</label>
+                            </div>
+                            
+                            <div class="signature-field">
+                                <label>วันที่รับมอบ</label>
+                                <input type="date" class="user-input">
+                            </div>
+                        </div>
+                    </div>
+                </td>
+<!-- เลือกรูปลายเซ็น -->
+        <td class="upload-section">
+    <div class="sign-box top-border">
+        <div class="upload-controls">
+            <input type="file" id="itFile" accept="image/*" onchange="previewImage(this, 'itPreview')" style="display: none;" class="admin-input">
+<button type="button" class="upload-btn admin-input" onclick="document.getElementById('itFile').click()">เลือกไฟล์</button>
+<button type="button" class="cancel-btn admin-input" id="itCancel" onclick="cancelImage('itFile', 'itPreview')" style="display: none;">ยกเลิก</button>
+
+            
+            <div class="image-preview" id="itPreview">
+                <img id="itImage" alt="Preview">
+                <p class="preview-placeholder">ยังไม่ได้เลือกรูปภาพ</p>
+            </div>
+        </div>
+        <p class="role-text">* เจ้าหน้าที่ IT ผู้ดำเนินการ</p>
+    </div>
+
+    <div class="sign-box">
+        <div class="upload-controls">
+            <input type="file" id="mgrFile" accept="image/*" onchange="previewImage(this, 'mgrPreview')" style="display: none;" class="admin-input">
+<button type="button" class="upload-btn admin-input" onclick="document.getElementById('mgrFile').click()">เลือกไฟล์</button>
+<button type="button" class="cancel-btn admin-input" id="mgrCancel" onclick="cancelImage('mgrFile', 'mgrPreview')" style="display: none;">ยกเลิก</button>
+
+            <div class="image-preview" id="mgrPreview">
+                <img id="mgrImage" alt="Preview">
+        <!-- แสดงลายเซ็นของ User ให้ Admin ดู (admin-only) -->
+        <div id="user-signatures-display" class="admin-only" style="padding:10px;">
+            <!-- populated dynamically -->
+        </div>
+                <p class="preview-placeholder">ยังไม่ได้เลือกรูปภาพ</p>
+            </div>
+        </div>
+        <p class="role-text">* ผู้จัดการแผนกบริหารจัดการระบบ IT ผู้ตรวจสอบ</p>
+    </div>
+</td>
+    </tr>
+</table>
+<br>
+
+
+<div class="action-bar">
+        <div class="btn-icon-wrapper" data-goto="login.html">
+        <img src="img/back-button.png" alt="Back">
+    </div>
+<div class="button-container no-print" id="admin-save-btn">
+    <button onclick="saveAllToFirebase()" class="btn-save">
+        บันทึกข้อมูลลง Firebase
+    </button>
+</div>
+
+<!-- ปุ่มส่งขั้นตอนสุดท้าย (จะโชว์เมื่อแนบลายเซ็นแล้ว) -->
+<div class="button-container no-print admin-only" id="final-submit-wrap" style="display:none;">
+    <button id="final-submit" onclick="finalSubmit()" style="display:none;" class="btn-save">
+        ส่งเอกสาร (Submit)
+    </button>
+</div>
+
+    <div class="admin-only">
+    <button type="button" onclick="window.print()">
+        <img src="img/printer.png" width="30">
+    </button>
+</div>
+
+<div class="admin-only">
+    <button class="btn-icon-wrapper" onclick="window.location.href='preview.html'" title="ดูตัวอย่าง">
+        <img src="img/file.png" alt="Preview" width="50">
+</button>
+</div>
+
+
+
+</body> 
+     <script type="module" src="firebase.js"></script>
+<script type="module" src="script.js"></script>
+
+
+   
+
+</html>

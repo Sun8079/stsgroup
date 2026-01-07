@@ -1,0 +1,103 @@
+/* login.css */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Sarabun', sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); /* พื้นหลังไล่เฉดสีน้ำเงิน */
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-container {
+    width: 100%;
+    padding: 20px;
+}
+
+.login-card {
+    background: rgba(255, 255, 255, 0.95);
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(6, 6, 6, 0.936);
+    text-align: center;
+}
+
+.logo {
+    width: 100px;
+    margin-bottom: 15px;
+}
+
+.login-header h1 {
+    font-size: 24px;
+    color: #1e3a8a;
+    margin-bottom: 5px;
+}
+
+.login-header p {
+    color: #64748b;
+    font-size: 14px;
+    margin-bottom: 30px;
+}
+
+.input-group {
+    text-align: left;
+    margin-bottom: 20px;
+    
+}
+
+.input-group label {
+    display: block;
+    font-size: 14px;
+    color: #1e293b;
+    margin-bottom: 8px;
+    font-weight: 600;
+    font-size: 30px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    outline: none;
+    transition: 0.3s;
+    font-size: 25px;
+}
+
+.input-group input:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.btn-login {
+    width: 100%;
+    padding: 14px;
+    background-color: #1e3a8a;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+    margin-top: 10px;
+}
+
+.btn-login:hover {
+    background-color: #1d4ed8;
+    transform: translateY(-2px);
+}
+
+.error-text {
+    color: #ef4444;
+    font-size: 13px;
+    margin-top: 15px;
+    display: none; /* ซ่อนไว้ก่อนจนกว่าจะล็อกอินผิด */
+}

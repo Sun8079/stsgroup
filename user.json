@@ -1,0 +1,15 @@
+{
+  "users": {
+    "admin_it": {
+      "name": "เจ้าหน้าที่ IT",
+      "pass": "11111",
+      "role": "admin"
+    },
+    "user_01": {
+      "name": "คุณสมชาย",
+      "pass": "1234",
+      "role": "user"
+    }
+    
+    }
+  }

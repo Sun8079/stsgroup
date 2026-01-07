@@ -1,0 +1,713 @@
+/*****************************************************
+ * นำเข้า 13.46 วันที่ 7/1/2569
+ *****************************************************/
+// // นำเข้าเฉพาะฟังก์ชันที่จำเป็นจาก Firebase (ตรวจสอบ path ให้ตรงกับที่ใช้ใน login)
+// import { getDatabase, ref, update, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+// import { push } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+// // ตัวแปรเก็บสถานะโหมดแก้ไข
+// let isEditEnabled = false;
+
+// const urlParams = new URLSearchParams(window.location.search);
+// const assetId = urlParams.get('id')
+
+//     // ฟังก์ชันบันทึกข้อมูล (ใส่ในหน้า Checklist)
+// function saveUserData() {
+//     // 1. ระบุชื่อ User หรือ ID (อาจจะดึงมาจากตัวแปรหรือ Input ชื่อผู้ใช้งาน)
+//     const userName = document.querySelector('.signature-line').value || 'UnknownUser';
+    
+//     // 2. ดึงข้อมูลจาก Input ต่างๆ (ต้องเช็คว่า ID ตรงกับใน HTML ของคุณไหม)
+//     const data = {
+//         login: document.querySelector('#check-login')?.checked || false,
+//         software: document.querySelector('#check-software')?.checked || false,
+//         sharing: document.querySelector('#check-sharing')?.checked || false,
+//         otherText: document.querySelector('#input-other')?.value || "",
+//         lastUpdate: new Date().toLocaleString('th-TH'),
+//         status: "เสร็จสมบูรณ์"
+//     };
+
+//     // 3. บันทึกลง LocalStorage
+//     localStorage.setItem(`data_${userName}`, JSON.stringify(data));
+    
+//     alert("บันทึกข้อมูลของ " + userName + " เรียบร้อยแล้ว!");
+// }
+//    // script.js (หรือใส่ใน index.html)
+// window.onload = function() {
+//     const params = new URLSearchParams(window.location.search);
+//     const userName = params.get('name');
+//     const role = params.get('role');
+
+//     // ถ้าไม่มี Role ให้เด้งกลับไป Login (ระบบป้องกัน)
+//     if (!role) {
+//         window.location.href = 'login.html';
+//         return;
+//     }
+
+//     // เติมชื่อผู้ใช้งานในช่องลงชื่อผู้รับมอบให้อัตโนมัติ (จากรูป image_99ee2c)
+//     const sigInput = document.querySelector('.signature-line');
+//     if (sigInput && userName) {
+//         sigInput.value = userName;
+//     }
+// };
+
+
+//     // ฟังก์ชันเปิด-ปิดปุ่มเรียกดู
+//     function checkFile(input, btnId) {
+//         const btn = document.getElementById(btnId);
+//         btn.disabled = input.files.length === 0;
+//     }
+
+//     // ฟังก์ชันเปิดไฟล์ดูใน Tab ใหม่เพื่อรีเช็ค
+//     function viewFile(inputId) {
+//         const file = document.getElementById(inputId).files[0];
+//         if (file) {
+//             const url = URL.createObjectURL(file);
+//             window.open(url, '_blank');
+//         }
+//     }
+   
+// window.createNewChecklist = async function() {
+//     try {
+//         const dbRef = ref(db, 'checklists');
+//         const initialData = {
+//             adminData: {
+//                 status: "Pending",
+//                 createAt: new Date().toISOString()
+//             }
+//         };
+
+//         // ใช้ push() เพื่อสร้าง Unique ID อัตโนมัติจาก Firebase
+//         const newDoc = await push(dbRef, initialData);
+//         const newId = newDoc.key; 
+
+//         // พา Admin ไปยังหน้าฟอร์มใหม่ที่เพิ่งสร้าง
+//         window.location.href = `index.html?role=admin&step=setup&id=${newId}`;
+//     } catch (error) {
+//         alert("ผิดพลาด: " + error.message);
+//     }
+// }
+
+
+
+// // ✅ ฟังก์ชันแสดงตัวอย่างภาพ
+// function previewImage(input, previewId) {
+//     const preview = document.getElementById(previewId);
+//     const img = preview.querySelector('img');
+//     const placeholder = preview.querySelector('.preview-placeholder');
+//     const cancelBtn = document.getElementById(previewId.replace('Preview', 'Cancel'));
+    
+//     if (input.files && input.files[0]) {
+//         const reader = new FileReader();
+        
+//         reader.onload = function(e) {
+//             img.src = e.target.result;
+//             img.style.display = 'block';
+//             if (placeholder) placeholder.style.display = 'none';
+//             preview.classList.add('has-image');
+//             if (cancelBtn) cancelBtn.style.display = 'inline-block';
+//         }
+        
+//         reader.readAsDataURL(input.files[0]);
+//     }
+// }
+
+// // ✅ ฟังก์ชันยกเลิกรูปภาพ
+// function cancelImage(inputId, previewId) {
+//     const input = document.getElementById(inputId);
+//     const preview = document.getElementById(previewId);
+//     const img = preview.querySelector('img');
+//     const placeholder = preview.querySelector('.preview-placeholder');
+//     const cancelBtn = document.getElementById(previewId.replace('Preview', 'Cancel'));
+    
+//     // ล้างค่า input
+//     input.value = '';
+    
+//     // ซ่อนรูป แสดง placeholder
+//     img.src = '';
+//     img.style.display = 'none';
+//     if (placeholder) placeholder.style.display = 'block';
+//     preview.classList.remove('has-image');
+//     if (cancelBtn) cancelBtn.style.display = 'none';
+// }
+
+// // ทำให้ฟังก์ชันเป็น global
+// window.previewImage = previewImage;
+// window.cancelImage = cancelImage;
+
+// async function checkRole() {
+//     const params = new URLSearchParams(window.location.search);
+//     const role = params.get('role') || 'user';
+//     const userName = params.get('name');
+//     const isAdmin = role === 'admin';
+    
+//     const adminPanel = document.getElementById('admin-controls');
+//     const adminInputs = document.querySelectorAll('.admin-input');
+//     const userInputs = document.querySelectorAll('.user-input');
+//     const editableTexts = document.querySelectorAll('.can-edit');
+
+//     // ดึง element สำหรับ file upload
+//     const itFileInput = document.getElementById('itFile');
+//     const mgrFileInput = document.getElementById('mgrFile');
+//     const uploadControls = document.querySelectorAll('.upload-controls');
+
+//     // เติมชื่อผู้ใช้งานในช่องลงชื่ออัตโนมัติ
+//     const sigInput = document.querySelector('.signature-line');
+//     if (sigInput && userName) {
+//         sigInput.value = decodeURIComponent(userName);
+//     }
+
+//     if (isAdmin) {
+//         // --- โหมด ADMIN (IT) ---
+//         document.body.classList.add('admin-mode');
+//         if (adminPanel) adminPanel.style.display = 'block';
+        
+//         adminInputs.forEach(el => el.disabled = false); 
+//         userInputs.forEach(el => el.disabled = true);
+        
+//         // Admin สามารถ upload ได้
+//         if (itFileInput) itFileInput.disabled = false;
+//         if (mgrFileInput) mgrFileInput.disabled = false;
+//         uploadControls.forEach(ctrl => ctrl.classList.remove('disabled'));
+        
+//     } else {
+//         // --- โหมด USER (ผู้รับมอบ) ---
+//         document.body.classList.remove('admin-mode');
+//         if (adminPanel) adminPanel.style.display = 'none';
+
+//         adminInputs.forEach(el => el.disabled = true); 
+//         userInputs.forEach(el => el.disabled = false);
+        
+//         // User ห้าม upload
+//         if (itFileInput) {
+//             itFileInput.disabled = true;
+//             itFileInput.style.opacity = '0.5';
+//             itFileInput.style.cursor = 'not-allowed';
+//         }
+//         if (mgrFileInput) {
+//             mgrFileInput.disabled = true;
+//             mgrFileInput.style.opacity = '0.5';
+//             mgrFileInput.style.cursor = 'not-allowed';
+//         }
+        
+//         uploadControls.forEach(ctrl => {
+//             ctrl.classList.add('disabled');
+//             const uploadBtn = ctrl.querySelector('.upload-btn');
+//             if (uploadBtn) {
+//                 uploadBtn.disabled = true;
+//                 uploadBtn.style.pointerEvents = 'none';
+//             }
+//         });
+        
+//         // เพิ่มข้อความแจ้งเตือน
+//         uploadControls.forEach(control => {
+//             if (!control.querySelector('.admin-only-notice')) {
+//                 const notice = document.createElement('small');
+//                 notice.className = 'admin-only-notice';
+//                 notice.style.color = '#999';
+//                 notice.style.display = 'block';
+//                 notice.style.marginTop = '5px';
+//                 notice.style.fontSize = '0.85em';
+//                 notice.textContent = '* เฉพาะเจ้าหน้าที่ IT เท่านั้น';
+//                 control.appendChild(notice);
+//             }
+//         });
+        
+//         // ดึงข้อมูลจาก Firebase
+//         const db = getDatabase();
+//         const snapshot = await get(ref(db, `checklists/${assetId}/adminData`));
+//         if (snapshot.exists()) {
+//             const adminData = snapshot.val();
+//             adminInputs.forEach((el, index) => {
+//                 const val = adminData[`item_${index}`];
+//                 if (el.type === 'checkbox') el.checked = val;
+//                 else el.value = val || "";
+//             });
+//         }
+
+//         editableTexts.forEach(el => el.contentEditable = "false");
+//     }
+// }
+
+// // ฟังก์ชันบันทึกข้อมูลลง Firebase
+// // window.saveAllToFirebase = async function() {
+// //     const urlParams = new URLSearchParams(window.location.search);
+// //     let currentId = urlParams.get('id'); 
+// //     const role = urlParams.get('role') || 'admin';
+
+// //     // 1. ตรวจสอบเบื้องต้น
+// //     if (!currentId) {
+// //         alert("❌ ไม่พบ ID ในระบบ กรุณาสร้างรายการใหม่ก่อน");
+// //         return;
+// //     }
+
+// //     // 2. ดึงชื่อจากช่อง Input (สมมติว่าช่องชื่อมี id="userName")
+// //     // หรือถ้าเป็นช่องลายเซ็นฝั่ง User ให้ใช้ชื่อจากช่องนั้น
+// //     const nameInput = document.querySelector('.signature-line'); 
+// //     const currentName = nameInput ? encodeURIComponent(nameInput.value) : "Unknown";
+
+// //     try {
+// //         const updates = {};
+        
+// //         // --- ส่วนการรวบรวมข้อมูล (เหมือนเดิม) ---
+// //         if (role === 'admin') {
+// //             const adminData = {};
+// //             document.querySelectorAll('.admin-input').forEach((el, index) => {
+// //                 adminData[el.id || `item_${index}`] = el.type === 'checkbox' ? el.checked : el.value;
+// //             });
+// //             updates[`checklists/${currentId}/adminData`] = adminData;
+// //         } else {
+// //             const userData = {
+// //                 signature: nameInput ? nameInput.value : "",
+// //                 date: new Date().toLocaleDateString('th-TH'),
+// //                 status: "Completed"
+// //             };
+// //             updates[`checklists/${currentId}/userData`] = userData;
+// //         }
+
+// //         // --- ทำการบันทึกข้อมูล ---
+// //         const { getDatabase, ref, update } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js");
+// //         const db = getDatabase();
+// //         await update(ref(db), updates);
+
+// //         // --- ส่วนที่ถาม: สร้าง URL และแสดงผล ---
+// //         const baseUrl = window.location.origin + window.location.pathname;
+// //         let nextStep = (role === 'admin') ? 'user_check' : 'admin_final';
+// //         let nextRole = (role === 'admin') ? 'user' : 'admin';
+
+// //         // สร้าง URL: รวม ID และ ชื่อ User ไปในลิงก์
+// //         const shareUrl = `${baseUrl}?role=${nextRole}&step=${nextStep}&id=${currentId}&name=${currentName}`;
+
+// //         // แสดงผลผ่าน Prompt ให้ก๊อปปี้ง่ายๆ
+// //         prompt(`✅ บันทึกสำเร็จ! คัดลอกลิงก์ส่งให้ ${nextRole} (${decodeURIComponent(currentName)}):`, shareUrl);
+
+// //     } catch (error) {
+// //         console.error("Error:", error);
+// //         alert("❌ เกิดข้อผิดพลาดในการบันทึก");
+// //     }
+// // };
+// // // ฟังก์ชันสร้างลิงก์
+// // window.generateUserLink = function() {
+// //     const params = new URLSearchParams(window.location.search);
+// //     const adminName = params.get('name') || "";
+// //     const baseUrl = window.location.origin + window.location.pathname;
+// //     const shareUrl = `${baseUrl}?role=user&id=${assetId}&from=${encodeURIComponent(adminName)}`;
+    
+// //     prompt("คัดลอกลิงก์นี้ส่งให้ User:", shareUrl);
+// // }
+/*****************************************************
+ * Firebase Import
+ * - ใช้เชื่อมต่อ Firebase Realtime Database
+ *****************************************************/
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getDatabase, ref, update, get, push } 
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAP1_sgUK02v289wWgIRmNHxnOburGICAE",
+  authDomain: "form-sts001.firebaseapp.com",
+  databaseURL: "https://form-sts001-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "form-sts001",
+  storageBucket: "form-sts001.firebasestorage.app",
+  messagingSenderId: "917455094092",
+  appId: "1:917455094092:web:178779efce9016e7574fe9",
+  measurementId: "G-5EL2CH6GY5"
+};
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+window.toggleEditMode = function() {
+    isEditEnabled = !isEditEnabled;
+    const editableTexts = document.querySelectorAll('.can-edit');
+    const btn = document.getElementById('edit-mode-btn');
+
+    editableTexts.forEach(el => {
+        el.contentEditable = isEditEnabled;
+        el.style.backgroundColor = isEditEnabled ? "#fff9c4" : "transparent";
+        el.style.border = isEditEnabled ? "1px dashed orange" : "none";
+    });
+
+    btn.innerHTML = isEditEnabled ? 'ปิดโหมดแก้ไข' : 'เปิดโหมดแก้ไขข้อความ';
+}
+document.addEventListener('DOMContentLoaded', () => {
+
+  // 1️⃣ ตรวจสอบ role (admin / user) และตั้งค่าหน้าเว็บ
+  checkRole();
+
+  // 2️⃣ ปุ่มเปิด-ปิดโหมดแก้ไขข้อความ (เฉพาะ Admin)
+  const editBtn = document.getElementById('edit-mode-btn');
+  if (editBtn) {
+    editBtn.addEventListener('click', toggleEditMode);
+  }
+
+  // 3️⃣ เลือกรูปเซ็นชื่อ IT → แสดง Preview
+  const itFile = document.getElementById('itFile');
+  if (itFile) {
+    itFile.addEventListener('change', (e) => {
+      previewImage(e.target, 'itPreview');
+    });
+  }
+
+  // 4️⃣ เลือกรูปเซ็นชื่อ Manager → แสดง Preview
+  const mgrFile = document.getElementById('mgrFile');
+  if (mgrFile) {
+    mgrFile.addEventListener('change', (e) => {
+      previewImage(e.target, 'mgrPreview');
+    });
+  }
+
+  // 5️⃣ ปุ่มหรือ div ที่ใช้ data-goto สำหรับเปลี่ยนหน้า
+  document.querySelectorAll('[data-goto]').forEach(el => {
+    el.addEventListener('click', () => {
+      window.location.href = el.dataset.goto;
+    });
+  });
+
+});
+
+
+// ตัวแปรควบคุมโหมดแก้ไขข้อความ (true = แก้ไขได้)
+let isEditEnabled = false;
+
+// ดึงค่า id (assetId) จาก URL
+const urlParams = new URLSearchParams(window.location.search);
+let assetId = urlParams.get('id');
+
+
+/*****************************************************
+ * ฟังก์ชันบันทึกข้อมูลผู้ใช้งาน (LocalStorage)
+ *****************************************************/
+function saveUserData() {
+    // ดึงชื่อผู้ใช้งานจากช่องลายเซ็น
+    const userName = document.querySelector('.signature-line')?.value || 'UnknownUser';
+
+    // รวบรวมข้อมูลจาก checkbox และ input
+    const data = {
+        login: document.querySelector('#check-login')?.checked || false,
+        software: document.querySelector('#check-software')?.checked || false,
+        sharing: document.querySelector('#check-sharing')?.checked || false,
+        otherText: document.querySelector('#input-other')?.value || "",
+        lastUpdate: new Date().toLocaleString('th-TH'),
+        status: "เสร็จสมบูรณ์"
+    };
+
+    // บันทึกข้อมูลลง LocalStorage
+    localStorage.setItem(`data_${userName}`, JSON.stringify(data));
+
+    alert(`บันทึกข้อมูลของ ${userName} เรียบร้อยแล้ว`);
+}
+
+
+/*****************************************************
+ * ฟังก์ชันสร้าง Checklist ใหม่ (Admin)
+ *****************************************************/
+async function createNewChecklist() {
+    try {
+        const db = getDatabase();
+        const dbRef = ref(db, 'checklists');
+
+        // ข้อมูลเริ่มต้นของ Checklist
+        // const initialData = {
+        //     adminData: {
+        //         status: "Pending",
+        //         createAt: new Date().toISOString()
+        //     }
+        // };
+        const initialData = {
+    adminData: {
+        status: "Pending",
+        createAt: new Date().toISOString(),
+        item_0: false,  // checkbox 1
+        item_1: false,  // checkbox 2
+        item_2: false,  // checkbox 3
+        item_3: "",     // input text อื่นๆ
+    }
+};
+// ----------------------------
+
+        // สร้าง ID อัตโนมัติจาก Firebase
+        const newDoc = await push(dbRef, initialData);
+        const newId = newDoc.key;
+
+        // ไปยังหน้าตั้งค่าในโหมด Admin
+        window.location.href = `index.html?role=admin&id=${newId}`;
+    } catch (error) {
+        alert("เกิดข้อผิดพลาด: " + error.message);
+    }
+}
+if (!assetId) {
+    alert("ไม่พบ assetId! กรุณาสร้าง Checklist ก่อน.");
+    // หรือ redirect ไปหน้า create checklist
+    window.location.href = "create.html";
+}
+
+
+/*****************************************************
+ * แสดง Preview รูปภาพก่อนอัปโหลด
+ *****************************************************/
+function previewImage(input, previewId) {
+    const preview = document.getElementById(previewId);
+    const img = preview.querySelector('img');
+    const placeholder = preview.querySelector('.preview-placeholder');
+    const cancelBtn = document.getElementById(previewId.replace('Preview', 'Cancel'));
+
+    if (!input.files || !input.files[0]) return;
+
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+        img.src = e.target.result;
+        img.style.display = 'block';
+        placeholder.style.display = 'none';
+        preview.classList.add('has-image');
+        if (cancelBtn) cancelBtn.style.display = 'inline-block';
+    };
+
+    reader.readAsDataURL(input.files[0]);
+}
+
+
+/*****************************************************
+ * ยกเลิกรูปภาพที่เลือก
+ *****************************************************/
+function cancelImage(inputId, previewId) {
+    const input = document.getElementById(inputId);
+    const preview = document.getElementById(previewId);
+    const img = preview.querySelector('img');
+    const placeholder = preview.querySelector('.preview-placeholder');
+    const cancelBtn = document.getElementById(previewId.replace('Preview', 'Cancel'));
+
+    input.value = '';
+    img.src = '';
+    img.style.display = 'none';
+    placeholder.style.display = 'block';
+    preview.classList.remove('has-image');
+    if (cancelBtn) cancelBtn.style.display = 'none';
+}
+
+
+/*****************************************************
+ * เปิด / ปิดโหมดแก้ไขข้อความ (Admin)
+ *****************************************************/
+
+    isEditEnabled = !isEditEnabled;
+
+    document.querySelectorAll('.can-edit').forEach(el => {
+        el.contentEditable = isEditEnabled;
+        el.style.backgroundColor = isEditEnabled ? '#fff9c4' : 'transparent';
+        el.style.border = isEditEnabled ? '1px dashed orange' : 'none';
+    });
+
+    const btn = document.getElementById('edit-mode-btn');
+    if (btn) {
+        btn.textContent = isEditEnabled ? 'ปิดโหมดแก้ไข' : 'เปิดโหมดแก้ไขข้อความ';
+    }
+
+
+
+/*****************************************************
+ * ตรวจสอบ Role (Admin / User) และตั้งค่าหน้าเว็บ
+ *****************************************************/
+async function checkRole() {
+    const params = new URLSearchParams(window.location.search);
+    const role = params.get('role') || 'user';
+    const isAdmin = role === 'admin';
+
+    const adminPanel = document.getElementById('admin-controls');
+    const adminInputs = document.querySelectorAll('.admin-input');
+    const userInputs = document.querySelectorAll('.user-input');
+    const adminButtons = document.querySelectorAll('.admin-only');
+    
+    if (isAdmin) {
+        // Admin
+        adminPanel && (adminPanel.style.display = 'block');
+        adminInputs.forEach(el => el.disabled = false);
+        adminInputs.forEach(el => el.style.display = 'inline-block');
+        userInputs.forEach(el => el.disabled = true);
+        // el.disabled = false;
+        //     el.style.display = 'inline-block';
+       
+        userInputs.forEach(el => el.disabled = true);
+
+        // แสดงปุ่ม admin
+        adminButtons.forEach(el => el.style.display = 'inline-block');
+    } else {
+        // User
+        adminPanel && (adminPanel.style.display = 'none');
+        adminInputs.forEach(el => el.disabled = true); // ปิดไม่ให้กด
+        adminInputs.forEach(el => el.style.display = 'none'); // ซ่อนปุ่มเลือกไฟล์
+        userInputs.forEach(el => el.disabled = false);
+        adminPanel && (adminPanel.style.display = 'none');
+        adminInputs.forEach(el => {
+            el.disabled = true; 
+            el.style.display = 'none';
+        });
+        userInputs.forEach(el => el.disabled = false);
+
+        // ซ่อนปุ่ม admin
+        adminButtons.forEach(el => el.style.display = 'none');
+    }
+}
+    
+  
+
+        // โหลดข้อมูล Admin จาก Firebase (ดูได้อย่างเดียว)
+        if (assetId) {
+            const db = getDatabase();
+            const snapshot = await get(ref(db, `checklists/${assetId}/adminData`));
+            if (snapshot.exists()) {
+                const adminData = snapshot.val();
+                adminInputs.forEach((el, i) => {
+                    const val = adminData[`item_${i}`];
+                    el.type === 'checkbox' ? el.checked = val : el.value = val || '';
+                });
+            }
+        }
+    
+// บันทึก role หลังล็อกอิน
+localStorage.setItem('role', 'admin'); // หรือ 'user'
+
+// โหลด role ทุกหน้า
+const role = localStorage.getItem('role') || 'user';
+const isAdmin = role === 'admin';
+
+
+
+/*****************************************************
+ * DOMContentLoaded
+ * - แทน onload / onclick (ผ่าน CSP)
+ *****************************************************/
+document.addEventListener('DOMContentLoaded', () => {
+
+    // เรียกตรวจสอบ Role ทันทีที่หน้าโหลด
+    checkRole();
+
+    // ปุ่มเปิดโหมดแก้ไข
+    document.getElementById('edit-mode-btn')
+        ?.addEventListener('click', toggleEditMode);
+
+    // เลือกรูป IT
+    document.getElementById('itFile')
+        ?.addEventListener('change', e =>
+            previewImage(e.target, 'itPreview')
+        );
+
+    // เลือกรูป Manager
+    document.getElementById('mgrFile')
+        ?.addEventListener('change', e =>
+            previewImage(e.target, 'mgrPreview')
+        );
+
+    // ปุ่มเปลี่ยนหน้า (ใช้ data-goto)
+    document.querySelectorAll('[data-goto]').forEach(el => {
+        el.addEventListener('click', () => {
+            window.location.href = el.dataset.goto;
+        });
+    });
+
+});
+
+async function saveAllToFirebase() {
+    try {
+        const db = getDatabase();
+
+        // สมมติว่า assetId มาจาก URL หรือสร้างใหม่
+        const urlParams = new URLSearchParams(window.location.search);
+        const assetId = urlParams.get('id');
+
+        if (!assetId) throw new Error("ไม่พบ assetId");
+if (!assetId) {
+            // สร้าง ID ใหม่ใน Firebase
+            const newRef = await push(ref(db, 'checklists'), {
+                createdAt: new Date().toISOString()
+            });
+            assetId = newRef.key;
+            // อัปเดต URL ให้มี id ใหม่ (ไม่ reload หน้า)
+            window.history.replaceState(null, '', `?id=${assetId}`);
+        }
+
+        // ดึงข้อมูลเก่าจาก Firebase
+        const snapshot = await get(ref(db, `checklists/${assetId}`));
+        let oldData = snapshot.exists() ? snapshot.val() : {};
+
+        // ดึงข้อมูลใหม่จากหน้าเว็บ
+        const newData = {
+            userData: {
+                login: document.querySelector('#check-login')?.checked || false,
+                software: document.querySelector('#check-software')?.checked || false,
+                sharing: document.querySelector('#check-sharing')?.checked || false,
+                otherText: document.querySelector('#input-other')?.value || "",
+                lastUpdate: new Date().toISOString(),
+            }
+        };
+
+        // รวมข้อมูลเก่ากับใหม่
+        const mergedData = { ...oldData, ...newData };
+
+        // อัปเดตลง Firebase
+        await update(ref(db, `checklists/${assetId}`), mergedData);
+
+        // สร้าง preview URL ให้ผู้ใช้
+        const previewUrl = `preview.html?id=${assetId}`;
+        alert(`บันทึกเรียบร้อย!\nURL หน้า preview: ${previewUrl}`);
+
+        // คัดลอก URL ไป clipboard
+        navigator.clipboard.writeText(previewUrl);
+
+    } catch (error) {
+        alert("เกิดข้อผิดพลาด: " + error.message);
+        console.error(error);
+    }
+}
+
+// ผูกปุ่มบันทึกกับฟังก์ชัน
+document.addEventListener('DOMContentLoaded', () => {
+    checkRole();
+    const btnSave = document.getElementById('btnSaveFirebase');
+    if (btnSave) {
+        btnSave.addEventListener('click', saveAllToFirebase);
+    }
+});
+//         // ดึงข้อมูลเก่าจาก Firebase ก่อน (เพื่อรวมกับข้อมูลใหม่)
+//         const snapshot = await get(ref(db, `checklists/${assetId}`));
+//         let oldData = snapshot.exists() ? snapshot.val() : {};
+
+//         // ดึงข้อมูลใหม่จากหน้าเว็บ (ตัวอย่าง)
+//         const newData = {
+//             userData: {
+//                 login: document.querySelector('#check-login')?.checked || false,
+//                 software: document.querySelector('#check-software')?.checked || false,
+//                 sharing: document.querySelector('#check-sharing')?.checked || false,
+//                 otherText: document.querySelector('#input-other')?.value || "",
+//                 lastUpdate: new Date().toISOString(),
+//             }
+//         };
+
+//         // รวมข้อมูลเก่ากับใหม่ (ไม่ลบข้อมูลเก่าที่ไม่ได้แก้)
+//         const mergedData = { ...oldData, ...newData };
+
+//         // อัปเดตลง Firebase
+//         await update(ref(db, `checklists/${assetId}`), mergedData);
+
+//         // แสดง alert พร้อมส่ง URL หน้า preview
+//         const previewUrl = `preview.html?id=${assetId}`;
+//         alert(`บันทึกเรียบร้อย!\nURL หน้า preview: ${previewUrl}`);
+
+//         // หรือสามารถคัดลอก URL ไป clipboard
+//         navigator.clipboard.writeText(previewUrl);
+
+//     } catch (error) {
+//         alert("เกิดข้อผิดพลาด: " + error.message);
+//         console.error(error);
+//     }
+// }
+
+// Export ให้ global ถ้าต้องเรียกจาก onclick HTML
+// ---------------------------------------------
+
+/*****************************************************
+ * export เป็น global (กรณีจำเป็น)
+ *****************************************************/
+window.saveUserData = saveUserData;
+window.createNewChecklist = createNewChecklist;
+window.cancelImage = cancelImage;
+window.saveAllToFirebase = saveAllToFirebase;
