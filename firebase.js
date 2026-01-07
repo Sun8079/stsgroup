@@ -2,16 +2,26 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
 import { getDatabase, ref, get, child } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
 // ใช้ Config เดิมของคุณ
+
 const firebaseConfig = {
-    apiKey: "AIzaSyAP1_sgUK02v289wwGiRmNHxnObuRGICAE",
-    authDomain: "form-sts001.firebaseapp.com",
-    projectId: "form-sts001",
-    databaseURL: "https://form-sts001-default-rtdb.asia-southeast1.firebasedatabase.app", // ตรวจสอบ URL ให้ตรงกับในรูป Data
-    appId: "1:917455094092:web:178779efce9016e7574fe9"
+  apiKey: "AIzaSyAP1_sgUK02v289wWgIRmNHxnOburGICAE",
+  authDomain: "form-sts001.firebaseapp.com",
+  databaseURL: "https://form-sts001-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "form-sts001",
+  storageBucket: "form-sts001.firebasestorage.app",
+  messagingSenderId: "917455094092",
+  appId: "1:917455094092:web:178779efce9016e7574fe9",
+  measurementId: "G-5EL2CH6GY5"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
+/// บันทึก role หลังล็อกอิน
+localStorage.setItem('role', 'admin'); // หรือ 'user'
+
+// โหลด role ทุกหน้า
+const role = localStorage.getItem('role') || 'user';
+const isAdmin = role === 'admin';
 
 // ฟังก์ชันทำงานเมื่อกดปุ่ม Login
 const btnLogin = document.getElementById('btnLogin');
@@ -29,7 +39,15 @@ if (btnLogin) {
                 
                 // ในหน้า login.html ตอนเช็ครหัส
 if (String(userData.pass) === String(passcode)) { // แปลงทั้งคู่เป็น String ก่อนเช็ค
-    window.location.href = `index.html?role=${userData.role}&name=${encodeURIComponent(userData.name)}`;
+    try {
+        localStorage.setItem('role', userData.role);
+        localStorage.setItem('name', userData.name);
+    } catch (e) { /* ignore */ }
+    // ถ้ามี id ใน URL ของหน้า login ให้ส่งต่อ id กลับไปด้วย
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
+    const base = `index.html?role=${userData.role}&name=${encodeURIComponent(userData.name)}`;
+    window.location.href = id ? `${base}&id=${encodeURIComponent(id)}` : base;
 } else {
                     errorMsg.style.display = 'block';
                     alert("รหัสผ่านไม่ถูกต้อง");

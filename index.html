@@ -5,9 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>STS Group</title>
 <link rel="stylesheet" href="style.css">
-<link rel="icon" type="image-icon" href="sts-image.png">
+<link rel="icon" type="image-icon" href="img/sts-image.png">
 </head>
-<body onload="checkRole()">
+<script>
+// หากเปิด root หรือ index.html โดยไม่มีพารามิเตอร์ role ให้ไปหน้า login ก่อนเสมอ
+// และต้องพา id ไปด้วยเพื่อไม่ให้ข้อมูลหายระหว่างทาง
+(function(){
+    try {
+        const params = new URLSearchParams(window.location.search);
+        const role = params.get('role');
+        const id = params.get('id');
+        const p = window.location.pathname.split('/').pop();
+        const isIndex = p === '' || p === 'index.html';
+        if (isIndex && !role) {
+            let target = 'login.html';
+            if (id) target += `?id=${encodeURIComponent(id)}`;
+            window.location.replace(target);
+        }
+    } catch (e) {
+        // ถ้ามีปัญหาใด ๆ ให้ไม่ขัดขวางการโหลดหน้า
+        console.error('redirect script error', e);
+    }
+})();
+</script>
+</head>
+<body >
     <table class="Header">
         <tr>
            <td class="logo-cell">
@@ -31,16 +53,19 @@
 </div>
 <div id="admin-controls" style="display: none; padding: 10px; background: #fdf6e3; border: 1px solid #eee; margin-bottom: 10px;">
     <strong>เครื่องมือผู้ดูแลระบบ:</strong> 
-    <button type="button" id="edit-mode-btn" onclick="toggleEditMode()" class="action-btn">
-        <span class="material-symbols-outlined" style="vertical-align: middle;">edit</span> เปิดโหมดแก้ไขข้อความ
-    </button>
-    <span id="edit-status" style="margin-left: 10px; color: red; font-weight: bold; display: none;">[ กำลังอยู่ในโหมดแก้ไข ]</span>
+    <!-- ปุ่มควบคุม -->
+<button id="edit-mode-btn">
+>เปิดโหมดแก้ไขข้อความ</button>
+   
+
+    <span class="edit-status" style="margin-left: 10px; color: red; font-weight: bold; display: none;">[ กำลังอยู่ในโหมดแก้ไข ]</span>
 </div>
 <table class="main-table">
     <thead>
         <tr>
-            <th class="col-no">ลำดับ</th> <th>หัวข้อรายการตรวจสอบ</th>
-            <th style="width: 350px;">ผลการตรวจสอบ</th>
+            <th class="col-no">ลำดับ</th>
+             <th>หัวข้อรายการตรวจสอบ</th>
+            <th style="width: 295px;">ผลการตรวจสอบ</th>
         </tr>
     </thead>
     <tbody>
@@ -137,122 +162,126 @@
 
 <table class="footer">
     <tr>
-       <td class="checklist-section">
-    <strong>ผู้รับมอบทดสอบการใช้งานดังนี้</strong><br><br>
-    <input type="checkbox" class="user-input"> สามารถ Login เข้าเครื่องได้<br>
-    <input type="checkbox" class="user-input"> สามารถใช้งานโปรแกรมพื้นฐานได้<br>
-    <input type="checkbox" class="user-input"> สามารถเข้าใช้งาน File sharing ได้<br>
-    <input type="checkbox" class="user-input"> อื่นๆ <textarea class="user-input"></textarea>
-    <br><br>
-    <div style="text-align: right;">
-        ลงชื่อ <input type="text" class="user-input signature-line"> ผู้รับมอบ<br>
-        วันที่รับมอบ <input type="date" class="user-input signature-line">
+       <tr>
+        <!-- ส่วนที่ user ต้องทำ -->
+    <td colspan="2">
+        <table style="width: 100%; border-collapse: collapse;">
+            <tr>
+                <td style="width: 50%; vertical-align: top; padding: 15px; border-right: 1px solid #ddd;">
+                    <!-- ส่วนผู้รับมอบทดสอบ -->
+                    <div class="test-section">
+                        <h3>ผู้รับมอบทดสอบการใช้งานดังนี้</h3>
+                        
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="test1" class="user-input">
+                            <label for="test1">สามารถ Login เข้าเครื่องได้</label>
+                        </div>
+                        
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="test2" class="user-input">
+                            <label for="test2">สามารถใช้งานโปรแกรมพื้นฐานได้</label>
+                        </div>
+                        
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="test3" class="user-input">
+                            <label for="test3">สามารถเข้าใช้งาน File sharing ได้</label>
+                        </div>
+                        
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="test4" class="user-input">
+                            <label for="test4">อื่นๆ</label>
+                            <input type="text" class="user-input" style="width: 0px; margin-left: 5px; padding: 3px 8px;" placeholder="ระบุ...">
+                        </div>
+                        
+                        <div class="signature-row">
+                            <div class="signature-field">
+                                <label>ลงชื่อ</label>
+                                <input type="text" class="signature-line user-input" placeholder="ระบุชื่อ">
+                                <label>ผู้รับมอบ</label>
+                            </div>
+                            
+                            <div class="signature-field">
+                                <label>วันที่รับมอบ</label>
+                                <input type="date" class="user-input">
+                            </div>
+                        </div>
+                    </div>
+                </td>
+<!-- เลือกรูปลายเซ็น -->
+        <td class="upload-section">
+    <div class="sign-box top-border">
+        <div class="upload-controls">
+            <input type="file" id="itFile" accept="image/*" onchange="previewImage(this, 'itPreview')" style="display: none;" class="admin-input">
+<button type="button" class="upload-btn admin-input" onclick="document.getElementById('itFile').click()">เลือกไฟล์</button>
+<button type="button" class="cancel-btn admin-input" id="itCancel" onclick="cancelImage('itFile', 'itPreview')" style="display: none;">ยกเลิก</button>
+
+            
+            <div class="image-preview" id="itPreview">
+                <img id="itImage" alt="Preview">
+                <p class="preview-placeholder">ยังไม่ได้เลือกรูปภาพ</p>
+            </div>
+        </div>
+        <p class="role-text">* เจ้าหน้าที่ IT ผู้ดำเนินการ</p>
+    </div>
+
+    <div class="sign-box">
+        <div class="upload-controls">
+            <input type="file" id="mgrFile" accept="image/*" onchange="previewImage(this, 'itPreview')" style="display: none;" class="admin-input">
+<button type="button" class="upload-btn admin-input" onclick="document.getElementById('itFile').click()">เลือกไฟล์</button>
+<button type="button" class="cancel-btn admin-input" id="itCancel" onclick="cancelImage('itFile', 'itPreview')" style="display: none;">ยกเลิก</button>
+
+            <div class="image-preview" id="mgrPreview">
+                <img id="mgrImage" alt="Preview">
+        <!-- แสดงลายเซ็นของ User ให้ Admin ดู (admin-only) -->
+        <div id="user-signatures-display" class="admin-only" style="padding:10px;">
+            <!-- populated dynamically -->
+        </div>
+                <p class="preview-placeholder">ยังไม่ได้เลือกรูปภาพ</p>
+            </div>
+        </div>
+        <p class="role-text">* ผู้จัดการแผนกบริหารจัดการระบบ IT ผู้ตรวจสอบ</p>
     </div>
 </td>
-
-        <td class="upload-section">
-            <div class="sign-box top-border">
-                <div class="upload-controls">
-                    <input type="file" id="itFile" accept="image/*" onchange="checkFile(this, 'btnIt')">
-                    <button type="button" id="btnIt" class="view-btn" onclick="viewFile('itFile')" disabled>เรียกดูไฟล์</button>
-                </div>
-                <p class="role-text">เจ้าหน้าที่ IT ผู้ดำเนินการ</p>
-            </div>
-
-            <div class="sign-box">
-                <div class="upload-controls">
-                    <input type="file" id="mgrFile" accept="image/*" onchange="checkFile(this, 'btnMgr')">
-                    <button type="button" id="btnMgr" class="view-btn" onclick="viewFile('mgrFile')" disabled>เรียกดูไฟล์</button>
-                </div>
-                <p class="role-text">ผู้จัดการแผนกบริหารจัดการระบบ IT ผู้ตรวจสอบ</p>
-            </div>
-        </td>
     </tr>
 </table>
 <br>
-<div id="admin-controls" style="display:none; padding: 10px; background: #eee; margin-bottom: 10px;">
-    <button id="edit-mode-btn" onclick="toggleEditMode()">เปิดโหมดแก้ไขข้อความ</button>
-    <button onclick="generateUserLink()">สร้างลิงก์ให้ User</button>
-</div>
-
 
 
 <div class="action-bar">
-    <div class="btn-icon-wrapper" onclick="window.location.href='login.html'" title="ย้อนกลับ">
+        <div class="btn-icon-wrapper" data-goto="login.html">
         <img src="img/back-button.png" alt="Back">
     </div>
-    <div class="button-container no-print">
-    <script type="module" src="script.js"></script>
+<div class="button-container no-print" id="admin-save-btn">
+    <button onclick="saveAllToFirebase()" class="btn-save">
+        บันทึกข้อมูลลง Firebase
+    </button>
+</div>
 
-<button type="button" class="btn-save" onclick="saveUserData()">
-    <span class="material-symbols-outlined">save</span> บันทึกข้อมูลขึ้น Cloud
-</button>
-    
+<!-- ปุ่มส่งขั้นตอนสุดท้าย (จะโชว์เมื่อแนบลายเซ็นแล้ว) -->
+<div class="button-container no-print admin-only" id="final-submit-wrap" style="display:none;">
+    <button id="final-submit" onclick="finalSubmit()" style="display:none;" class="btn-save">
+        ส่งเอกสาร (Submit)
+    </button>
+</div>
+
+    <div class="admin-only">
     <button type="button" onclick="window.print()">
         <img src="img/printer.png" width="30">
     </button>
 </div>
 
-    <div class="btn-icon-wrapper" onclick="window.location.href='preview.html'" title="ดูตัวอย่าง">
-<script>
-    // ฟังก์ชันบันทึกข้อมูล (ใส่ในหน้า Checklist)
-function saveUserData() {
-    // 1. ระบุชื่อ User หรือ ID (อาจจะดึงมาจากตัวแปรหรือ Input ชื่อผู้ใช้งาน)
-    const userName = document.querySelector('.signature-line').value || 'UnknownUser';
-    
-    // 2. ดึงข้อมูลจาก Input ต่างๆ (ต้องเช็คว่า ID ตรงกับใน HTML ของคุณไหม)
-    const data = {
-        login: document.querySelector('#check-login')?.checked || false,
-        software: document.querySelector('#check-software')?.checked || false,
-        sharing: document.querySelector('#check-sharing')?.checked || false,
-        otherText: document.querySelector('#input-other')?.value || "",
-        lastUpdate: new Date().toLocaleString('th-TH'),
-        status: "เสร็จสมบูรณ์"
-    };
-
-    // 3. บันทึกลง LocalStorage
-    localStorage.setItem(`data_${userName}`, JSON.stringify(data));
-    
-    alert("บันทึกข้อมูลของ " + userName + " เรียบร้อยแล้ว!");
-}
-   // script.js (หรือใส่ใน index.html)
-window.onload = function() {
-    const params = new URLSearchParams(window.location.search);
-    const userName = params.get('name');
-    const role = params.get('role');
-
-    // ถ้าไม่มี Role ให้เด้งกลับไป Login (ระบบป้องกัน)
-    if (!role) {
-        window.location.href = 'login.html';
-        return;
-    }
-
-    // เติมชื่อผู้ใช้งานในช่องลงชื่อผู้รับมอบให้อัตโนมัติ (จากรูป image_99ee2c)
-    const sigInput = document.querySelector('.signature-line');
-    if (sigInput && userName) {
-        sigInput.value = userName;
-    }
-};
+<div class="admin-only">
+    <button class="btn-icon-wrapper" onclick="window.location.href='preview.html'" title="ดูตัวอย่าง">
+        <img src="img/file.png" alt="Preview" width="50">
+</button>
+</div>
 
 
-    // ฟังก์ชันเปิด-ปิดปุ่มเรียกดู
-    function checkFile(input, btnId) {
-        const btn = document.getElementById(btnId);
-        btn.disabled = input.files.length === 0;
-    }
 
-    // ฟังก์ชันเปิดไฟล์ดูใน Tab ใหม่เพื่อรีเช็ค
-    function viewFile(inputId) {
-        const file = document.getElementById(inputId).files[0];
-        if (file) {
-            const url = URL.createObjectURL(file);
-            window.open(url, '_blank');
-        }
-    }
-   
-</script>
-      <script src="script.js"></script>
 </body> 
+     <script type="module" src="firebase.js"></script>
+<script type="module" src="script.js"></script>
+
 
    
 

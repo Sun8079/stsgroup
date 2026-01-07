@@ -121,8 +121,26 @@ th {
 
 /* Print Styles */
 @media print {
+    /* Force single-page A4 layout with compact spacing */
+    @page { size: A4 portrait; margin: 10mm; }
+
+    html, body { background: #fff; padding: 0; margin: 0; }
     .no-print { display: none !important; }
-    body { background: white; padding: 0; }
-    .container { box-shadow: none; width: 100%; border: none; }
-    th { background-color: #f0f0f0 !important; -webkit-print-color-adjust: exact; }
+
+    .container { box-shadow: none; width: 100%; border: none; padding: 0; margin: 0; }
+    .header { margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px solid #eee; }
+    .search-section { display: none !important; }
+    .footer { margin-top: 6px; }
+
+    /* Make table compact and wrap content */
+    .table-responsive { overflow: visible !important; }
+    table { table-layout: fixed; width: 100%; font-size: 11px; border-collapse: collapse; }
+    th, td { padding: 6px; white-space: normal; word-break: break-word; overflow-wrap: anywhere; }
+
+    /* Avoid page breaks inside the table */
+    table, thead, tbody, tr, td, th { page-break-inside: avoid; break-inside: avoid; }
+    header.header, footer.footer { page-break-inside: avoid; break-inside: avoid; }
+
+    /* Preserve header background color in print */
+    th { background-color: #f0f0f0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 }

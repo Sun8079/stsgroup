@@ -1,6 +1,6 @@
 body {
     font-family: 'Sarabun', sans-serif;
-    font-size: 16px; /* ขนาดตัวอักษร */
+    font-size: 18px; /* เพิ่มขนาดตัวอักษรสำหรับหน้าจอ */
     color: #110000; /* สีของตัวอักษร */
     margin: 20px;
 }
@@ -51,6 +51,14 @@ table {
     width: 100%;
     border-collapse: collapse;
     table-layout: auto;
+}
+
+/* ให้ตัวหนังสือในตารางหลักมีขนาดเท่ากัน (ประมาณ 18px) */
+.main-table, .main-table th, .main-table td, .main-table tbody tr, .main-table thead tr {
+    font-size: 18px;
+}
+.main-table input, .main-table textarea, .main-table .readonly-admin-value, .main-table .can-edit {
+    font-size: 18px;
 }
 
  td {
@@ -126,54 +134,113 @@ p2 {
 }
 
 
-/* ช่องของ User */
-.footer{
-  
-    justify-content: center;
-    
-    margin-top: 0%;
-    font-size: 18px;
-      font-family: 'Sarabun', sans-serif;
+/* ปรับส่วน test-section ให้พอดี */
 
-}
- 
-        /* ฝั่งซ้าย: รายการ Checkbox */
-        .checklist-section {
-            width: 60%;
-            padding-right: 20px;
-            border: 2px solid #100000;
-    padding: 3px;
-    
-    text-align: start;        /* จัดกลางแนวนอน */
-  vertical-align: middle;
-        }
- .signature-line {
-            border-bottom: 1px dotted #000;
-            width: 180px;
-            display: inline-block;
-            margin: 0 10px; 
-        } 
-    
-        textarea { /*อื่นๆ*/
-            width: 10%;
-            height: 15px;
-            vertical-align: middle;
-        }
-        /* อัพFile */
-        .upload-section {
-    width: 45%;
-    padding: 0; /* ล้าง padding เพื่อให้เส้นคั่นชิดขอบ */
-}
-
-.sign-box {
-    height: 120px;
+.test-section {
+    padding: 0;
+    border: none;
+    background: transparent;
+    height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 10px;
 }
 
+.test-section h3 {
+    margin: 0 0 12px 0;
+    font-size: 15px;
+    font-weight: bold;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 8px;
+}
+
+.checkbox-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.checkbox-item input[type="checkbox"] {
+    margin-right: 8px;
+    flex-shrink: 0;
+}
+
+.checkbox-item label {
+    margin: 0;
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+.checkbox-item input[type="text"] {
+    flex: 1;
+    min-width: 150px;
+}
+/* จัดการกล่องภาพรวม */
+.checkbox-grid {
+    display: grid;
+    /* แบ่งเป็น 3 คอลัมน์แบบพอดีเนื้อหา (Auto) */
+    grid-template-columns: repeat(2, auto); 
+    /* ปรับระยะห่างระหว่างคอลัมน์ (20px) และระยะห่างระหว่างบรรทัด (5px) */
+    gap: 5px 20px; 
+    padding: 10px 0;
+    /* ให้ข้อมูลเรียงชิดซ้าย */
+    justify-content: start; 
+}
+
+/* จัดการแต่ละรายการ */
+.check-item {
+    display: flex;
+    align-items: center;
+    font-size: 16px; /* ปรับขนาดตัวอักษรสำหรับ checkbox labels */
+    cursor: pointer;
+    white-space: nowrap; /* ป้องกันข้อความตัดขึ้นบรรทัดใหม่ */
+}
+
+/* จัดการระยะห่างระหว่างช่อง Checkbox กับตัวอักษร */
+.check-item input[type="checkbox"] {
+    margin: 0 6px 0 0; /* เว้นระยะด้านขวาแค่ 6px */
+    cursor: pointer;
+    width: 14px; /* กำหนดขนาดช่องติ๊กให้คงที่ */
+    height: 14px;
+}
+
+/* ส่วนหัวข้อ (ถ้าต้องการให้ชิดกับกลุ่ม checkbox มากขึ้น) */
+.can-edit {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.signature-row {
+    margin-top: auto;
+    padding-top: 15px;
+    border-top: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.signature-field {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+}
+
+.signature-field label {
+    white-space: nowrap;
+    margin: 0;
+}
+
+.signature-field input {
+    padding: 5px 8px;
+    border: 1px solid #284be7;
+    border-radius: 3px;
+    font-size: 13px;
+}
+
+.signature-line {
+    flex: 1;
+    min-width: 150px;
+}
 .top-border {
     border-bottom: 1px solid black;
 }
@@ -201,8 +268,8 @@ p2 {
 
 /* เมื่อเป็น Admin และเอาเมาส์ไปชี้ (Hover) */
 .admin-mode .admin-input:hover:not(:disabled) {
-    background-color: #fff9c4; /* สีเหลืองอ่อนให้รู้ว่าแก้ได้ */
-    border: 1px solid #ffca28;
+    background-color: #7dde72; /* สีเหลืองอ่อนให้รู้ว่าแก้ได้ */
+    border: 1px solid #2b2a2a;
     cursor: edit;
 }
 
@@ -264,7 +331,9 @@ p2 {
 .can-edit[contenteditable="true"] {
     padding: 2px 5px;
     min-width: 50px;
-    display: inline-block;
+    /* ให้คงรูปแบบของตารางไว้ (ถ้า .can-edit เป็น td) */
+    display: table-cell;
+    border: 1px dashed #000204;
 }
 /* button */
 .action-bar {
@@ -321,6 +390,29 @@ p2 {
 
     .btn-admin-edit:hover { background-color: #1976d2; }
 
+    @media print {
+        /* ลดขนาดเมื่อต้องการพิมพ์ให้อยู่ในหน้าเดียว */
+        html, body { margin: 6mm; }
+        body { font-size: 11px; }
+        table { font-size: inherit; border-collapse: collapse; }
+    .sign-box img, 
+    .upload-section img,
+    td img {
+        width: 150px !important; /* ปรับขนาดความกว้างตามต้องการ */
+        height: auto !important;  /* ให้ความสูงปรับตามอัตราส่วนเดิม */
+        max-width: 100%;          /* ไม่ให้ใหญ่เกินขอบตาราง */
+        display: block;
+        margin: 5px auto;         /* จัดให้อยู่กึ่งกลาง */
+    }
+
+    /* ถ้าต้องการให้ตารางขยายความสูงตามรูปที่ใหญ่ขึ้น */
+    table td {
+        height: auto !important;
+    }
+}
+
+/* ช่วยให้ตารางไม่หลุดหน้ากระดาษเมื่อต้องพิมพ์ */
+@page { size: A4 portrait; margin: 6mm; }
     /* ซ่อนส่วนที่ไม่จำเป็นตอนพิมพ์ */
     @media print {
         .action-bar, .admin-tools { display: none !important; }
@@ -387,4 +479,152 @@ p2 {
     width: 100%;
     border: 1px solid black;
     margin-top: 10px;
+}
+/* กำหนดกระดาษ */
+
+@page {
+    size: A4 portrait;
+    margin: 8mm 10mm; /* ขอบบน-ล่าง 8mm, ซ้าย-ขวา 10mm */
+}
+
+@media print {
+    * {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    
+    body {
+        margin: 0;
+        padding: 0;
+        font-size: 9pt;
+        line-height: 1.1;
+        width: 100%;
+        height: 100%;
+    }
+    
+    /* ลดขนาด header */
+    .header, h1, h2 {
+        font-size: 10pt;
+        margin: 3px 0;
+        padding: 2px 0;
+    }
+    
+    /* ปรับตาราง */
+    table {
+        font-size: 8.5pt;
+        width: 100%;
+        border-collapse: collapse;
+        margin: 0;
+    }
+    
+    td, th {
+        padding: 3px 5px;
+        line-height: 1.2;
+    }
+    
+    /* ลดระยะห่างระหว่างแถว */
+    tr {
+        height: auto;
+    }
+    
+    /* ลดขนาด checkbox และ label */
+    input[type="checkbox"] {
+        width: 10px;
+        height: 10px;
+        margin: 0 3px 0 0;
+    }
+    
+    label {
+        font-size: 8pt;
+        margin: 0 8px 0 0;
+    }
+    
+    /* ลดขนาดส่วนหมายเหตุ */
+    .note, .footer-note {
+        font-size: 7.5pt;
+        margin: 2px 0;
+        line-height: 1.1;
+    }
+    
+    /* ลดขนาดส่วนลายเซ็น */
+    .sign-box {
+        font-size: 8pt;
+        padding: 5px;
+        margin: 3px 0;
+    }
+    
+    .upload-controls {
+        padding: 3px;
+    }
+    
+    .role-text {
+        font-size: 7.5pt;
+        margin: 2px 0;
+    }
+    
+    /* บังคับไม่ให้แบ่งหน้า */
+    table, .sign-box, .upload-section {
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+    
+    /* ซ่อนปุ่มและสิ่งที่ไม่จำเป็น */
+    button, .no-print, .view-btn {
+        display: none !important;
+    }
+    
+    /* ปรับ logo และ header */
+    .logo, img {
+        max-width: 60px;
+        max-height: 60px;
+    }
+    
+    /* ลด spacing ทั่วไป */
+    p {
+        margin: 2px 0;
+    }
+    
+    /* ปรับส่วน info บน-ล่าง */
+    .info-row {
+        font-size: 8.5pt;
+        margin: 2px 0;
+    }
+}
+.action-btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin: 5px;
+    transition: all 0.3s;
+}
+
+.action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.action-btn.primary {
+    background: #2196F3;
+    color: white;
+}
+
+.action-btn.success {
+    background: #4CAF50;
+    color: white;
+}
+
+.action-btn.submit {
+    background: #FF9800;
+    color: white;
+    font-size: 18px;
+    padding: 15px 40px;
+}
+
+.action-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    opacity: 0.6;
 }
