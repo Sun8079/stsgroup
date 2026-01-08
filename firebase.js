@@ -16,12 +16,17 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
+
+export { db };
+
 /// บันทึก role หลังล็อกอิน
 localStorage.setItem('role', 'admin'); // หรือ 'user'
 
 // โหลด role ทุกหน้า
 const role = localStorage.getItem('role') || 'user';
 const isAdmin = role === 'admin';
+
+window.database = db;
 
 // ฟังก์ชันทำงานเมื่อกดปุ่ม Login
 const btnLogin = document.getElementById('btnLogin');
@@ -46,6 +51,23 @@ if (String(userData.pass) === String(passcode)) { // แปลงทั้งค
     // ถ้ามี id ใน URL ของหน้า login ให้ส่งต่อ id กลับไปด้วย
     const params = new URLSearchParams(window.location.search);
     const id = params.get('id');
+    // If an asset id is present, verify that this username matches the intended recipient (if set)
+    if (id) {
+        try {
+            const checklistSnap = await get(child(dbRef, `checklists/${id}/userData`));
+            if (checklistSnap.exists()) {
+                const intended = checklistSnap.val().name;
+                // if intended name exists and doesn't match this user's registered name, block access
+                if (intended && String(intended).trim() !== String(userData.name).trim()) {
+                    alert('บัญชีนี้ไม่มีสิทธิ์เข้าถึงรายการนี้ (ชื่อผู้ใช้ไม่ตรงกับผู้รับมอบ)');
+                    return;
+                }
+            }
+        } catch (e) {
+            console.error('checklist lookup error', e);
+            // proceed if error in verification
+        }
+    }
     const base = `index.html?role=${userData.role}&name=${encodeURIComponent(userData.name)}`;
     window.location.href = id ? `${base}&id=${encodeURIComponent(id)}` : base;
 } else {

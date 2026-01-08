@@ -42,7 +42,8 @@ function renderTable(records) {
     if (!records || records.length === 0) {
         document.getElementById('table-body').innerHTML = '<tr><td colspan="4" style="text-align:center;">ไม่มีข้อมูล</td></tr>';
         return;
-    }
+    }    
+    
     // Only show records whose status is either "เสร็จแล้ว" (finished)
     // or "รออยู่" (waiting). Also accept common English equivalents.
     const allowed = ['เสร็จแล้ว', 'รออยู่', 'finished', 'completed', 'waiting', 'waiting for user','submitted'];
@@ -53,6 +54,9 @@ function renderTable(records) {
         if (name === 'ยังไม่มีผู้รับ') return false;
         const statusRaw = (d.adminData?.status || d.userData?.status || '').toString().trim().toLowerCase();
         return allowed.some(a => statusRaw.includes(a));
+        
+        
+        
     });
 
     
@@ -62,6 +66,12 @@ function renderTable(records) {
         const adminSummary = summarizeAdminValues(d.adminValues);
         const status = d.adminData?.status || d.userData?.status || '-';
         const finished = d.adminData?.submittedAt || d.userData?.updatedAt || '-';
+ // determine class: completed/submitted -> green, otherwise pending/yellow
+        const statusRaw = (status || '').toString().toLowerCase();
+        let statusClass = 'status-pending';
+        if (statusRaw.includes('completed') || statusRaw.includes('submitted') || statusRaw.includes('เสร็จ')) {
+            statusClass = 'status-complete';
+        }
 
         return `
         <tr>
@@ -69,8 +79,8 @@ function renderTable(records) {
             <td><strong>${userName}</strong><br><small>ID: ${r.id}</small></td>
             <td>${adminSummary}</td>
             <td>
-                <div>${status}</div>
-                <div style="font-size:0.9em; color:#666">${finished}</div>
+                <div class="status ${statusClass}">${status}</div>
+                <div style="font-size:1em; color:#666">${finished}</div>
                 <div style="margin-top:6px">
                 <a href="index.html?role=admin&id=${r.id}">เปิด</a></div>
             </td>

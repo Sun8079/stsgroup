@@ -16,6 +16,9 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
+// editing state flags
+let adminEditing = false;
+let userEditing = false;
 
 function toggleEditMode() {
     isEditEnabled = !isEditEnabled;
@@ -26,27 +29,27 @@ function toggleEditMode() {
         el.style.border = isEditEnabled ? '1px dashed orange' : 'none';
     });
 
-    const btn = document.getElementById('edit-mode-btn');
-    if (btn) {
-        btn.textContent = isEditEnabled
-            ? 'ปิดโหมดแก้ไข'
-            : 'เปิดโหมดแก้ไขข้อความ';
-    }
-    // เมื่อปิดโหมดแก้ไข ให้ล้าง style ที่อาจทำให้ layout ตารางพัง
-    if (!isEditEnabled) {
-        document.querySelectorAll('.can-edit').forEach(el => {
-            // ล้างเฉพาะ property ที่เราเปลี่ยนแปลงขณะ edit
-            el.style.display = '';
-            el.style.backgroundColor = '';
-            el.style.border = '';
-        });
-        // ถ้าตารางถูกซ่อนด้วย inline-style ให้คืนค่าเป็นปกติ
-        document.querySelectorAll('table').forEach(t => {
-            if (t.style && (t.style.display === 'none' || t.style.display === '')) {
-                t.style.display = '';
-            }
-        });
-    }
+    // const btn = document.getElementById('edit-mode-btn');
+    // if (btn) {
+    //     btn.textContent = isEditEnabled
+    //         ? 'ปิดโหมดแก้ไข'
+    //         : 'เปิดโหมดแก้ไขข้อความ';
+    // }
+    // // เมื่อปิดโหมดแก้ไข ให้ล้าง style ที่อาจทำให้ layout ตารางพัง
+    // if (!isEditEnabled) {
+    //     document.querySelectorAll('.can-edit').forEach(el => {
+    //         // ล้างเฉพาะ property ที่เราเปลี่ยนแปลงขณะ edit
+    //         el.style.display = '';
+    //         el.style.backgroundColor = '';
+    //         el.style.border = '';
+    //     });
+    //     // ถ้าตารางถูกซ่อนด้วย inline-style ให้คืนค่าเป็นปกติ
+    //     document.querySelectorAll('table').forEach(t => {
+    //         if (t.style && (t.style.display === 'none' || t.style.display === '')) {
+    //             t.style.display = '';
+    //         }
+    //     });
+    // }
 }
 // ดูว่า URL เป็น admin หรือ user → แล้วเปิด/ปิด element บนหน้าเว็บให้ถูกสิทธิ์
 async function checkRole() {
@@ -98,10 +101,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // หากมี assetId ให้โหลดข้อมูลจาก Firebase (adminSnapshot หรือ user/admin data)
     if (assetId) loadChecklist(assetId);
   // 2️⃣ ปุ่มเปิด-ปิดโหมดแก้ไขข้อความ (เฉพาะ Admin)
-  const editBtn = document.getElementById('edit-mode-btn');
-  if (editBtn) {
-    editBtn.addEventListener('click', toggleEditMode);
-  }
+//   const editBtn = document.getElementById('edit-mode-btn');
+//   if (editBtn) {
+//     editBtn.addEventListener('click', toggleEditMode);
+//   }
 
   // 3️⃣ เลือกรูปเซ็นชื่อ IT → แสดง Preview
   const itFile = document.getElementById('itFile');
@@ -125,6 +128,42 @@ document.addEventListener('DOMContentLoaded', () => {
       window.location.href = el.dataset.goto;
     });
   });
+
+    // ปุ่มแก้ไขข้อมูล (shared) - เช็ค role ก่อนทำงาน
+    const editDataBtn = document.getElementById('edit-data-btn');
+    if (editDataBtn) {
+        editDataBtn.addEventListener('click', () => {
+            const params = new URLSearchParams(window.location.search);
+            const role = params.get('role') || localStorage.getItem('role') || 'user';
+            // ถ้าเป็น Admin ให้สลับการแก้ admin-input
+            if (role === 'admin') {
+                adminEditing = !adminEditing;
+                document.querySelectorAll('.admin-input').forEach(el => {
+                    // allow file inputs and buttons to remain available
+                    if (el.type === 'file') {
+                        el.disabled = !adminEditing;
+                        el.style.display = adminEditing ? 'inline-block' : (el.dataset.hiddenWhenNotAdmin ? 'none' : el.style.display);
+                    } else {
+                        el.disabled = !adminEditing;
+                    }
+                });
+                editDataBtn.textContent = adminEditing ? 'ปิดแก้ไข (Admin)' : 'แก้ไขข้อมูล';
+                if (!adminEditing && assetId) {
+                    // ถ้ปิด mode แก้ไข ให้ถามว่าต้องการส่งลิงก์ให้ user แก้หรือไม่
+                    const send = confirm('ต้องการส่งลิงก์ให้ผู้รับมอบ (User) แก้ข้อมูลไหม? เลือก "ตกลง" เพื่อสร้างลิงก์สำหรับผู้ใช้');
+                    if (send) {
+                        const userUrl = `${window.location.origin}/index.html?id=${encodeURIComponent(assetId)}`;
+                        showLinkAlert('ส่งลิงก์ให้ User', 'ส่งลิงก์นี้ให้ User (ผู้รับต้องล็อกอินก่อนทำแบบฟอร์ม)', userUrl);
+                    }
+                }
+            } else {
+                // User toggles editability of user inputs
+                userEditing = !userEditing;
+                document.querySelectorAll('.user-input').forEach(el => el.disabled = !userEditing);
+                editDataBtn.textContent = userEditing ? 'ปิดแก้ไขข้อมูล' : 'แก้ไขข้อมูล';
+            }
+        });
+    }
 
   // Update submit button visibility based on preview images
   updateShowSubmitButton();
@@ -542,6 +581,15 @@ async function saveAllToFirebase() {
 
             // บันทึก userData ลง Firebase (under checklists/{assetId}/userData)
             try {
+                // include any user signature images from preview(s)
+                try {
+                    const up1 = document.querySelector('#userPreview1 img');
+                    if (up1 && up1.src) {
+                        userData.signatures = userData.signatures || {};
+                        userData.signatures.sig1 = up1.src;
+                    }
+                } catch (e) { /* ignore */ }
+
                 await update(ref(db, `checklists/${assetId}/userData`), userData);
             } catch (e) {
                 console.error('save userData error', e);
@@ -681,3 +729,5 @@ async function searchChecklistByName(name) {
 window.createNewChecklist = createNewChecklist;
 window.cancelImage = cancelImage;
 window.saveAllToFirebase = saveAllToFirebase;
+// expose previewImage to inline handlers in HTML (scripts are loaded as modules)
+window.previewImage = previewImage;

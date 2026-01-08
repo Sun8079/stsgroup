@@ -95,12 +95,14 @@ th {
 }
 
 .status {
-    padding: 5px 12px;
-    border-radius: 20px;
-    font-size: 12px;
+    display: block;
+    width: 100%;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 13px;
     color: white;
     font-weight: bold;
-    display: inline-block;
+    margin-bottom: 6px;
 }
 
 .status-complete { background: #10b981; }

@@ -112,8 +112,9 @@ th {
 
 /* ปรับช่องหมายเหตุในตาราง */
 .admin-input[type="text"] {
-    width: 100%;
-    border: 1px solid transparent;
+    width: 95%;
+    border: 1px solid ;
+    
     background: transparent;
     padding: 5px;
 }

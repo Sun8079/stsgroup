@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>STS Group</title>
-<link rel="stylesheet" href="style.css">
-<link rel="icon" type="image-icon" href="img/sts-image.png">
+   <link rel="stylesheet" href="admin-edit.css">
+    <title>Admin Edit</title>
 </head>
+<body>
+    <h1 class="Head" style="border:0.1em solid rgb(22, 107, 244); padding:5px; text-align: center ;">Admin Edit Page</h1>
 <script>
 // หากเปิด root หรือ index.html โดยไม่มีพารามิเตอร์ role ให้ไปหน้า login ก่อนเสมอ
 // และต้องพา id ไปด้วยเพื่อไม่ให้ข้อมูลหายระหว่างทาง
@@ -52,9 +53,7 @@
   <span>ชื่อเครื่อง : NB25-PRO0015</span>
 </div>
 <div id="admin-controls" style="display: none; padding: 10px; background: #e3fdf6; border: 5px solid #330bfe; margin-bottom: 10px;">
-    <strong>เครื่องมือผู้ดูแลระบบ:</strong>
     <!-- ปุ่มควบคุม -->
-    <!-- <button id="edit-mode-btn">เปิดโหมดแก้ไขข้อความ</button> -->
     <div class="button-container no-print" style="display:inline-block; margin-left:8px;">
         <button id="edit-data-btn" class="action-btn">แก้ไขข้อมูล</button>
     </div>
@@ -72,6 +71,7 @@
             <th class="col-no">ลำดับ</th>
              <th>หัวข้อรายการตรวจสอบ</th>
             <th style="width: 295px;">ผลการตรวจสอบ</th>
+            <th style="width: 5%;">ลบ</th>
         </tr>
     </thead>
     <tbody>
@@ -204,8 +204,10 @@
                         <div class="signature-row">
                             <div class="signature-field">
                                 <label>ลงชื่อ</label>
-                                <input type="text" class="signature-line user-input" placeholder="ระบุชื่อ">
-                                <label>ผู้รับมอบ</label>
+                                    <!-- เปลี่ยนเป็นอัปโหลดไฟล์ลายเซ็นแทนข้อความ -->
+                                    <input type="file" id="userFile1" accept="image/*" class="user-input" style="display:none;" onchange="previewImage(this, 'userPreview1')">
+                                    <button type="button" class="action-btn" onclick="document.getElementById('userFile1').click()">แนบไฟล์ลายเซ็น</button>
+                                    <label>ผู้รับมอบ</label>
                             </div>
                             
                             <div class="signature-field">
@@ -213,6 +215,14 @@
                                 <input type="date" class="user-input">
                             </div>
                         </div>
+                    </div>
+                </td>
+                <!-- User signature preview -->
+                <td style="vertical-align: top; padding-left: 20px;">
+                    <div id="userPreview1" class="image-preview">
+                        <img alt="User signature preview" style="display:none; max-width:220px; height:auto; border:1px solid #ccc; padding:4px;" />
+                        <p class="preview-placeholder">ยังไม่ได้แนบลายเซ็น</p>
+                        <button type="button" id="userCancel1" class="action-btn" style="display:none; margin-top:8px;" onclick="cancelImage('userFile1','userPreview1')">ยกเลิก</button>
                     </div>
                 </td>
 <!-- เลือกรูปลายเซ็น -->
@@ -240,10 +250,6 @@
 
             <div class="image-preview" id="mgrPreview">
                 <img id="mgrImage" alt="Preview">
-        <!-- แสดงลายเซ็นของ User ให้ Admin ดู (admin-only) -->
-        <div id="user-signatures-display" class="admin-only" style="padding:10px;">
-            <!-- populated dynamically -->
-        </div>
                 <p class="preview-placeholder">ยังไม่ได้เลือกรูปภาพ</p>
             </div>
         </div>
@@ -274,7 +280,7 @@
 </div>
 
     <div class="admin-only">
-    <button class="button" onclick="window.print()">
+    <button class="btn-icon-wrapper" onclick="window.print()">
         <img src="img/printer.png" width="30">
     </button>
 </div>
@@ -289,9 +295,12 @@
 
 </body> 
      <script type="module" src="firebase.js"></script>
-<script type="module" src="script.js"></script>
+<script type="module" src="admin-edit.js"></script>
 
 
    
 
+</html>
+
+</body>
 </html>
