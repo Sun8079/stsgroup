@@ -56,13 +56,6 @@
     <!-- ปุ่มควบคุม -->
     <button id="edit-mode-btn">เปิดโหมดแก้ไขข้อความ</button>
     <span class="edit-status" style="margin-left: 10px; color: red; font-weight: bold; display: none;">[ กำลังอยู่ในโหมดแก้ไข ]</span>
-
-    <!-- Search by user name (admin only) -->
-    <div id="search-area" style="margin-top:10px;">
-        <input type="text" id="search-name" placeholder="ค้นหาชื่อผู้รับมอบ" style="padding:6px; width:220px;">
-        <button id="search-btn" class="btn-save">ค้นหา</button>
-        <div id="search-results" style="margin-top:8px;"></div>
-    </div>
 </div>
 <table class="main-table">
     <thead>
@@ -252,7 +245,7 @@
 
 
 <div class="action-bar">
-        <div class="btn-icon-wrapper" data-goto="login.html">
+        <div class="btn-icon-wrapper" data-modal="index.html">
         <img src="img/back-button.png" alt="Back">
     </div>
 <div class="button-container no-print" id="admin-save-btn">

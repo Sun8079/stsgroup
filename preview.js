@@ -35,6 +35,7 @@ function summarizeAdminValues(adminValues) {
         }
     });
     return parts.length ? parts.join(' | ') : '-';
+    
 }
 
 function renderTable(records) {
@@ -42,7 +43,19 @@ function renderTable(records) {
         document.getElementById('table-body').innerHTML = '<tr><td colspan="4" style="text-align:center;">ไม่มีข้อมูล</td></tr>';
         return;
     }
+    // Only show records whose status is either "เสร็จแล้ว" (finished)
+    // or "รออยู่" (waiting). Also accept common English equivalents.
+    const allowed = ['เสร็จแล้ว', 'รออยู่', 'finished', 'completed', 'waiting', 'waiting for user','submitted'];
+    records = records.filter(r => {
+        const d = r.data || {};
+        const name = (d.userData?.name || '').toString().trim();
+        if (!name) return false;
+        if (name === 'ยังไม่มีผู้รับ') return false;
+        const statusRaw = (d.adminData?.status || d.userData?.status || '').toString().trim().toLowerCase();
+        return allowed.some(a => statusRaw.includes(a));
+    });
 
+    
     const html = records.map((r, idx) => {
         const d = r.data;
         const userName = d.userData?.name || 'ยังไม่มีผู้รับ';
@@ -58,7 +71,8 @@ function renderTable(records) {
             <td>
                 <div>${status}</div>
                 <div style="font-size:0.9em; color:#666">${finished}</div>
-                <div style="margin-top:6px"><a href="index.html?role=admin&id=${r.id}">เปิด</a></div>
+                <div style="margin-top:6px">
+                <a href="index.html?role=admin&id=${r.id}">เปิด</a></div>
             </td>
         </tr>`;
     }).join('');
@@ -75,12 +89,24 @@ document.getElementById('search-input').addEventListener('input', () => {
 });
 
 // view detail (redirect)
-function viewDetail(assetId) {
-    window.location.href = `index.html?role=admin&id=${assetId}`;
-}
+// function viewDetail(assetId) {
+//     window.location.href = `index.html?role=admin&id=${assetId}`;
+// }
 
 // print button
 document.getElementById('btnPrint').addEventListener('click', () => window.print());
+// 
+
+document.addEventListener('click', (e) => {
+  const el = e.target.closest('[data-action]');
+  if (!el) return;
+
+  switch (el.dataset.action) {
+    case 'index.html':
+      window.location.href = 'index.html';
+      break;
+  }
+});
 
 // show current date
 const dateSpan = document.getElementById('current-date');

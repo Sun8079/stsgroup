@@ -230,6 +230,13 @@ async function loadChecklist(id) {
                                 d2.innerHTML = `<div style="margin-top:8px;"><strong>ลายเซ็นผู้รับมอบ (2)</strong><br><img src="${ui.signatures.sig2}" style="max-width:220px; height:auto; border:1px solid #ccc; padding:4px;"/></div>`;
                                 display.appendChild(d2);
                             }
+                            // แสดงวันที่รับมอบถ้ามี
+                            if (ui.deliveryDate || ui.date) {
+                                const d3 = document.createElement('div');
+                                d3.style.marginTop = '8px';
+                                d3.innerHTML = `<div><strong>วันที่รับมอบ:</strong> ${ui.deliveryDate || ui.date}</div>`;
+                                display.appendChild(d3);
+                            }
                         }
                     }
                 }
@@ -250,6 +257,12 @@ async function loadChecklist(id) {
                 }
             } catch (e) { console.error('populate signatures error', e); }
         }
+
+                // เติมวันที่รับมอบของผู้ใช้ (ถ้ามี) เข้าใน input date ของหน้า
+                try {
+                    const dateInput = document.querySelector('.signature-row input[type="date"].user-input');
+                    if (dateInput) dateInput.value = (data.userData && (data.userData.deliveryDate || data.userData.date)) || dateInput.value || '';
+                } catch (e) { /* ignore */ }
 
         // ถ้านี่คือรายการที่สร้างขึ้น (ไม่ใช่ template) ให้ปิดการแก้ไข admin-fields ยกเว้นการอัปโหลดรูปและปุ่ม submit
         if (role === 'admin' && (data.createdFrom || data.userData)) {
@@ -508,13 +521,15 @@ async function saveAllToFirebase() {
         } else {
             // อ่านค่าจริงตาม ID ของอินพุตในหน้า (test1/test2/test3 และกล่องข้อความถัดจาก test4)
         const otherInputEl = document.querySelector('#test4')?.parentElement?.querySelector('input[type="text"].user-input');
+        const deliveryDateVal = document.querySelector('.signature-row input[type="date"].user-input')?.value || '';
         const userData = {
                 login: document.getElementById('test1')?.checked || false,
                 software: document.getElementById('test2')?.checked || false,
                 sharing: document.getElementById('test3')?.checked || false,
                 other: document.getElementById('test4')?.checked || false,
                 otherText: otherInputEl ? (otherInputEl.value || '') : '',
-                name: document.querySelector('.signature-line.user-input')?.value || params.get('name') || localStorage.getItem('name') || '',
+            name: document.querySelector('.signature-line.user-input')?.value || params.get('name') || localStorage.getItem('name') || '',
+            deliveryDate: deliveryDateVal,
                 status: 'Completed',
                 updatedAt: new Date().toISOString()
             };
